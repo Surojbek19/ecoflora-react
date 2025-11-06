@@ -4,12 +4,19 @@ import { Provider } from "react-redux";
 import { store } from "./app/store";
 import App from "./app/App";
 import reportWebVitals from "./reportWebVitals";
+import  CssBaseline  from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
 import "./css/index.css";
+import theme from "./theme";
+
 
 ReactDOM.render(  //.render() → actually draws your React components inside that root.
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={theme}>
+         <CssBaseline />
+         <App />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root") //document is REAL DOM's instance, and we are getting "root" from it's method
