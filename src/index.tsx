@@ -6,8 +6,8 @@ import App from "./app/App";
 import reportWebVitals from "./reportWebVitals";
 import  CssBaseline  from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
+import theme from "./app/material/MaterialTheme";
 import "./css/index.css";
-import theme from "./theme";
 
 
 ReactDOM.render(  //.render() → actually draws your React components inside that root.
