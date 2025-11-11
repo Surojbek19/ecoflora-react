@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 import App from "./app/App";
@@ -10,8 +10,11 @@ import theme from "./app/material/MaterialTheme";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./css/index.css";
 
+const container = document.getElementById('root')!; //document is REAL DOM's instance, and we are getting "root" from it's method
+const root = createRoot(container);
 
-ReactDOM.render(  //.render() → actually draws your React components inside that root.
+
+root.render(  //.render() → actually draws your React components inside that root.
   <React.StrictMode> 
     {/* React’s "debugging assistant */}
     <Provider store={store}>
@@ -26,8 +29,7 @@ ReactDOM.render(  //.render() → actually draws your React components inside th
           </Router>
       </ThemeProvider>
     </Provider>
-  </React.StrictMode>,
-  document.getElementById("root") //document is REAL DOM's instance, and we are getting "root" from it's method
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
