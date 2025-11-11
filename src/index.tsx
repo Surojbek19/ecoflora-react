@@ -12,11 +12,16 @@ import "./css/index.css";
 
 
 ReactDOM.render(  //.render() → actually draws your React components inside that root.
-  <React.StrictMode>
+  <React.StrictMode> 
+    {/* React’s "debugging assistant */}
     <Provider store={store}>
+      {/* connecting your app to Redux(ma'lumotlar bunkeri) */}
       <ThemeProvider theme={theme}>
+        {/* customized component */}
          <CssBaseline />
+         {/* It helps ensure your app looks the same across all browsers */}
           <Router>
+            {/* It enables routing — so you can navigate between pages (URLs) in your app without reloading. */}
             <App />
           </Router>
       </ThemeProvider>
