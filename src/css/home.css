@@ -208,3 +208,70 @@
   align-items: center;
   font-weight: 500;
 }
+
+* ADVERTISEMENT */
+
+.homepage .ads-restaurant-frame{
+  width: 100%;
+  height: 693px;
+  display: flex;
+  overflow: hidden;
+  transform: perspective(0px);
+  box-shadow: -3px 0px 20px 14px #34343480;
+}
+
+.homepage .ads-restaurant-frame .ads-video{
+  width: 100%;
+  background: #0c0e12;
+  display: flex;
+  box-shadow: 0px -8px 90px rgb(215 215 255);
+  transform: scale(1.5);
+  overflow: hidden;
+}
+
+
+
+/* ACTIVE USERS */
+.homepage .active-users-frame{
+  width: 100%;
+  height: 500px;
+  background: #f8f8ff;
+  display: flex;
+}
+
+.homepage .active-users-frame .category-title{
+  font-family: "Dancing Script";
+  font-style: normal;
+  font-weight:700;
+  font-size: 36px;
+  line-height: 43px;
+}
+
+.homepage .active-users-frame .cards-frame{
+  width: 100%;
+  margin-top: 57px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 14px;
+  
+}
+
+.homepage .active-users-frame .cards-frame .card {
+  height: 335px;
+  width: 290px;
+  cursor: pointer;
+}
+
+.homepage .active-users-frame .cards-frame .card {
+  width: 271px;
+  height: 27px;
+  text-align: center;
+}
+  
+.homepage .active-users-frame .cards-frame .card .member-name {
+  width: 100%;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+}
