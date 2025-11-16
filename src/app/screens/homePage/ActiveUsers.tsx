@@ -27,7 +27,7 @@ export default function ActiveUsers(){
               {activeUsers.length !== 0 ? (
                 activeUsers.map((ele, index) => {
                   return (
-                    <Card className={"card"} variant="outlined">
+                    <Card key={index} className={"card"} variant="outlined">
                     <CardOverflow className="member-image">
                       <AspectRatio ratio="1">
                         <img src={ele.memberImage} alt=""/>
