@@ -1,9 +1,10 @@
 import { Box, Button, Container, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
+import { Tune } from "@mui/icons-material";
 
 export default function HomeNavbar() {
-    const authMember = null;
+    const authMember = true;
     return <div className="home-navbar">
         <Container className="navbar-container">
             <Stack className="menu">
