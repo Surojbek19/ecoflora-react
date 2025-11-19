@@ -169,12 +169,19 @@ p{
     border-radius: 15px;
     margin-top: 25px;
     gap: 30px;
-    box-shadow: 15px 12px rgba(187, 187,191, 0.5),
-    inset 0px 0px 15px 2px #D4D5E9;
+    /* box-shadow: 15px 12px rgba(187, 187,191, 0.5),
+    inset 0px 0px 15px 2px #D4D5E9; */
 }
+
+
 
 .orders-page .order-container .order-left .order-main-content .order-main-box {
     margin-bottom: 40px;
+    box-shadow: 15px 12px rgba(187, 187,191, 0.5),
+    inset 0px 0px 15px 2px #D4D5E9;
+    border-radius: 15px;
+    padding: 20px;
+    /* background-color: blue; */
 }
 
 .orders-page .order-container .order-left .order-main-content .order-main-box .order-box-scroll {
@@ -182,6 +189,7 @@ p{
     min-height: 47px;
     display: flex;
     flex-direction: column;
+    /* background-color: red; */
 }
 
 .orders-page .order-container .order-left .order-main-content .order-main-box .order-box-scroll .orders-name-price {
