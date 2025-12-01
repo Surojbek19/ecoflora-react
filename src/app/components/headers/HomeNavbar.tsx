@@ -4,7 +4,7 @@ import Basket from "./Basket";
 import { Tune } from "@mui/icons-material";
 
 export default function HomeNavbar() {
-    const authMember = true;
+    const authMember = null;
     return <div className="home-navbar">
         <Container className="navbar-container">
             <Stack className="menu">
