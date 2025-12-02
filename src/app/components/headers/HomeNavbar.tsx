@@ -2,9 +2,26 @@ import { Box, Button, Container, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
 import { Tune } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
 
 export default function HomeNavbar() {
     const authMember = null;
+    const [count, setCount] = useState<number>(0);
+    const [value, setvalue] = useState<boolean>(true)
+
+    useEffect(() => {
+        console.log("componentDidMount", count); //DATA FETCH
+        setCount(count + 1);
+        return () => {
+            console.log("componentWillUnmount")
+        }
+    }, [value]) //The [value] part tells React: “Only run this effect when value changes.”
+
+     /** HANDLERS **/
+    const buttonHandler = () => {
+        setvalue(!value);
+    }
+
     return <div className="home-navbar">
         <Container className="navbar-container">
             <Stack className="menu">
@@ -58,12 +75,13 @@ export default function HomeNavbar() {
                     <Box className="wel-txt">
                         The Choice, not just a choice
                     </Box>
-                    <Box className="service-txt">24 hours service</Box>
+                    <Box className="service-txt">{count} hours service</Box>
                     <Box className="signup">
                         {!authMember ? (
                         <Button 
                         variant={"contained"} 
                         className="signup-button"
+                        onClick={buttonHandler}
                         >SIGN UP</Button> 
                         ): null }
                     </Box>
