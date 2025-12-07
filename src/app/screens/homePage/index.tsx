@@ -27,7 +27,8 @@ const polularDishesRetriever = createSelector(
 export default function HomePage() {
   const { setPopularDishes } = actionDispatch(useDispatch());
   const { popularDishes } = useSelector(polularDishesRetriever)
-  // Selector: Store => Data
+
+  console.log(process.env.REACT_APP_API_URL)
   
   useEffect(() => {
     // Backend server data request => Data 
