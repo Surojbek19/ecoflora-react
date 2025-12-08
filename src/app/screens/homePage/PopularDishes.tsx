@@ -10,28 +10,36 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
-// import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import { retrievePopularDishes } from "./selector"
+import { Product } from "../../../lib/data/types/product";
+import { serverApi } from "../../../lib/data/config";
 
-const list = [
-{ productName: "Lavash", imagePath: "/img/lavash.webp"},
-{ productName: "Cutlet", imagePath: "/img/cutlet.webp"},
-{ productName: "Kebab", imagePath: "/img/kebab.webp"},
-{ productName: "Kebab", imagePath: "/img/kebab-fresh.webp"},
-]
+/** REDUX SLICE & SELECTOR **/
+const polularDishesRetriever = createSelector(
+  retrievePopularDishes,
+  (popularDishes) => ({popularDishes}) 
+)
+
 
 export default function PopularDishes() {
+    const { popularDishes } = useSelector(polularDishesRetriever)
+
+    console.log("Popular Dishes:", popularDishes)
     return (
     <div  className="popular-dishes-frame">
         <Container>
             <Stack className="popular-section">
                 <Box className="category-title">Polulat Dishes</Box>
                 <Stack className="cards-frame">
-                   {list.map((ele, index) => {
+                   {popularDishes.map((ele: Product) => {
+                    const imagePath = `${serverApi}/${ele.productImages[0]}`
                     return (
-                        <CssVarsProvider key={index}>
+                        <CssVarsProvider key={ele._id}>
                             <Card className={"crad"}>
                                 <CardCover>
-                                    <img src={ ele.imagePath } alt="" />
+                                    <img src={ imagePath } alt="" />
                                 </CardCover>
                                 <CardCover  className={"card-cover"} />
                                 <CardContent sx={{justifyContent: "flex-end"}}>
@@ -57,7 +65,7 @@ export default function PopularDishes() {
                                         display: "flex",
                                     }}
                                     >
-                                        20
+                                        {ele.productViews}
                                         <VisibilityIcon 
                                         sx={{ fontSize: 25 , marginLeft: "5px"}}
                                         />
@@ -78,7 +86,7 @@ export default function PopularDishes() {
                                     startDecorator={<DescriptionOutlinedIcon />}
                                     textColor={"neutral.300"}
                                     >
-                                        This is delicious meal
+                                        {ele.productDesc}
                                     </Typography>
 
                                 </CardOverflow>
