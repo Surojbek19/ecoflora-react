@@ -5,7 +5,7 @@ import { Product } from "./product";
 /** RAECT APP STATE **/
 export interface AppRootState {
     homePage: HomePageState; // homePage screen component
-    // productsPage: ProductsPageState;  // productsPage screen component
+    productsPage: ProductsPageState;  // productsPage screen component
     // ordersPage: OrdersPAgeState; // ordersPage screen component
 }
 
@@ -17,5 +17,10 @@ export interface HomePageState {
 }
 
 /** PRODUCTS PAGE **/
+export interface ProductsPageState {
+    restaurant: Member | null;
+    chosenProduct: Product | null;
+    products: Product[];
+}
 
 /** ORDERS PAGE **/
