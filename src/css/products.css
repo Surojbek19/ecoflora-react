@@ -242,6 +242,18 @@
     letter-spacing: 0%;
 }
 
+.products-page .products .food-box .food-frame .no-data {
+  display: flex;
+  justify-content: center;  
+  align-items: center;  
+  height: 100%;     
+  width: 100%;
+  font-size: 30px;
+  font-weight: 600;
+  color: #E3C08E;
+
+}
+
 .products-page .products .pagination-box {
     position: relative;
     width: 100%;
