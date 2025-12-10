@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, CardContent, Container, Input, Stack, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
@@ -20,6 +20,9 @@ import { setProducts } from "./slice";
 import { createSelector } from "reselect";
 import { retrieveProducts } from "./selector";
 import { Product } from "../../../lib/data/types/product";
+import ProductService from "../../services/ProductService";
+import { ProductCollection } from "../../../lib/data/enums/product.enum";
+import { serverApi } from "../../../lib/data/config";
 
 
 /** REDUX SLICE & SELECTOR **/
@@ -34,21 +37,24 @@ const productsRetriever = createSelector(
 
 
 
-const products = [
-    { productName: "Lavash", imagePath: "/img/lavash.webp"},
-    { productName: "Cutlet", imagePath: "/img/cutlet.webp"},
-    { productName: "Kebab", imagePath: "/img/kebab.webp"},
-    { productName: "Kebab", imagePath: "/img/kebab-fresh.webp"},
-    { productName: "Lavash", imagePath: "/img/lavash.webp"},
-    { productName: "Cutlet", imagePath: "/img/cutlet.webp"},
-    { productName: "Kebab", imagePath: "/img/kebab.webp"},
-    { productName: "Kebab", imagePath: "/img/kebab-fresh.webp"},
-]
-
-
-
 
 export default function Products() {
+    const { setProducts } = actionDispatch(useDispatch());
+    const { products } = useSelector(productsRetriever)
+ 
+    useEffect(() => {
+        const product = new ProductService();
+        product.getProducts({
+            page: 1,
+            limit: 8,
+            order: "createdAt",
+            productCollection: ProductCollection.DISH,
+            search: "",
+        })
+        .then((data) => setProducts(data))
+        .catch((err) => console.log(err));
+    }, [])
+
     return <div className={"products"}>
        <Container>
         <Stack flexDirection={"column"} alignItems={"center"}>
@@ -141,35 +147,46 @@ export default function Products() {
 
                 </Stack>
                  <Stack className="food-frame">
-                    {products.map((ele, index) => {
+                    {products.length !== 0 ? (
+                    products.map((product: Product) => {
+                        const imagePath = `${serverApi}/${product.productImages[0]}`;
+                        const sizeVolume = 
+                        product.productCollection === ProductCollection.DRINK
+                        ? product.productVolume + " l"
+                        : product.productSize + " size";
                         return (
                             <Stack className="food-info">
-                                <CssVarsProvider key={index}>
+                                <CssVarsProvider key={product._id}>
                                     <Card className="card">
                                         <CardOverflow>
-                                            <div className="food-size">LARGE size</div>
+                                            <div className="food-size">{sizeVolume}</div>
                                             <AspectRatio ratio={"1"} style={{borderRadius:"0px 50px 0px 0px"}}>
-                                                <img style={{borderRadius:"0px 50px 0px 0px", width:"100%", height:"100%"}} src={ ele.imagePath } alt="" />
+                                                <img style={{borderRadius:"0px 50px 0px 0px", width:"100%", height:"100%"}} src={ imagePath } alt="" />
                                             </AspectRatio>
                                             <CardContent className="shopping-cart">
                                                 <img src="icons/shopping-cart.svg" alt="" />
                                             </CardContent>
                                         </CardOverflow>
-                                        <Badge badgeContent={9} className="view-badge">
-                                            <RemoveRedEyeIcon sx={{fontSize:"30px"}}/>
+                                        <Badge badgeContent={product.productViews} className="view-badge">
+                                            <RemoveRedEyeIcon sx={{
+                                                color: product.productViews === 0 ? "gray" : "white",
+                                                fontSize:"30px"}}/>
                                         </Badge>
                                     </Card>
-                                    <Box className="food-name">{ele.productName}</Box>
+                                    <Box className="food-name">{product.productName}</Box>
                                     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
                                         <img style={{width: "32px", height: "31px"}} src="/img/usd.webp" />
-                                        <span style={{ fontSize: "24x", fontWeight: "600", color: "#E3C08E" }}>
-                                            12
+                                        <span style={{ fontSize: "20px", fontWeight: "600", color: "#E3C08E" }}>
+                                            {product.productPrice}
                                         </span>
                                     </Box>
                                 </CssVarsProvider>
                             </Stack>
                         )
-                    })}
+                    })
+                ) : ( 
+                    <Box>Products Are not avaiable</Box>
+                )}
                 </Stack>
 
             </Stack>
