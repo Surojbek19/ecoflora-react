@@ -37,12 +37,16 @@ function App() {
         onRemove ={ onRemove }
         onDelete ={ onDelete }
         onDeleteAll ={ onDeleteAll }
+        setSignupOpen={setSignupOpen}
+        setLoginOpen={setLoginOpen}
         /> : <OtherNavbar 
         cartItems={cartItems}
         onAdd = {onAdd}
         onRemove ={ onRemove }
         onDelete ={ onDelete }
         onDeleteAll ={ onDeleteAll }
+        setSignupOpen={setSignupOpen}
+        setLoginOpen={setLoginOpen}
         />}
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
