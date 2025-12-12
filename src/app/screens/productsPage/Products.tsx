@@ -259,7 +259,6 @@ export default function Products(props: ProductsProps) {
                                                     variant="soft"
                                                     color="neutral"
                                                     onClick={(e) => {
-                                                        console.log("BUTTON PRESSED")
                                                         onAdd({
                                                             _id: product._id,
                                                             quantity: 1,
