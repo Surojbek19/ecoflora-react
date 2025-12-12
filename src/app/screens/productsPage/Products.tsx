@@ -26,6 +26,8 @@ import { serverApi } from "../../../lib/data/config";
 import { kMaxLength } from "buffer";
 import { Key } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
+import { CartItem } from "../../../lib/data/types/search";
+
 
 
 /** REDUX SLICE & SELECTOR **/
@@ -38,10 +40,13 @@ const productsRetriever = createSelector(
   (products) => ({products}) 
 )
 
+interface ProductsProps {
+  onAdd: (item: CartItem) => void;
+}
 
 
-
-export default function Products() {
+export default function Products(props: ProductsProps) {
+    const {onAdd} = props;
     const { setProducts } = actionDispatch(useDispatch());
     const { products } = useSelector(productsRetriever);
     const[productSearch, setProductSearch] = useState<ProductInquiry>({
@@ -240,18 +245,34 @@ export default function Products() {
                                 className="food-info"
                                 key={product._id}
                                 onClick={() => chooseDishHnadler(product._id)}
-                                sx={{ cursor: "pointer" }}
                                 >
                                 <CssVarsProvider>
                                     <Card className="card">
-                                        <CardOverflow>
+                                        <CardOverflow >
                                             <div className="food-size">{sizeVolume}</div>
                                             <AspectRatio ratio={"1"} style={{borderRadius:"0px 50px 0px 0px"}}>
                                                 <img style={{borderRadius:"0px 50px 0px 0px", width:"100%", height:"100%"}} src={ imagePath } alt="" />
                                             </AspectRatio>
-                                            <CardContent className="shopping-cart">
-                                                <img src="icons/shopping-cart.svg" alt="" />
-                                            </CardContent>
+                                            <div style={{ position: "absolute", zIndex: 2, bottom: 8, right: 8 }}>
+                                                <JoyButton
+                                                    className="shopping-cart"
+                                                    variant="soft"
+                                                    color="neutral"
+                                                    onClick={(e) => {
+                                                        console.log("BUTTON PRESSED")
+                                                        onAdd({
+                                                            _id: product._id,
+                                                            quantity: 1,
+                                                            name: product.productName,
+                                                            price: product.productPrice,
+                                                            image: product.productImages[0]
+                                                            });
+                                                        e.stopPropagation()
+                                                    }}
+                                                >
+                                                    <img src="icons/shopping-cart.svg" alt="" />
+                                                </JoyButton>
+                                            </div>
                                         </CardOverflow>
                                         <Badge badgeContent={product.productViews} className="view-badge">
                                             <RemoveRedEyeIcon sx={{
