@@ -9,6 +9,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./app/material/MaterialTheme";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./css/index.css";
+import ContextProvider from "./app/context/ContextProvider";
 
 const container = document.getElementById('root')!; //document is REAL DOM's instance, and we are getting "root" from it's method
 const root = createRoot(container);
@@ -19,7 +20,8 @@ root.render(  //.render() → actually draws your React components inside that r
     {/* React’s "debugging assistant */}
     <Provider store={store}>
       {/* connecting your app to Redux(ma'lumotlar bunkeri) */}
-      <ThemeProvider theme={theme}>
+      <ContextProvider>
+         <ThemeProvider theme={theme}>
         {/* customized component */}
          <CssBaseline />
          {/* It helps ensure your app looks the same across all browsers */}
@@ -28,6 +30,7 @@ root.render(  //.render() → actually draws your React components inside that r
             <App />
           </Router>
       </ThemeProvider>
+      </ContextProvider>
     </Provider>
   </React.StrictMode>
 );
