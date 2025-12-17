@@ -16,6 +16,7 @@ import "../../../css/order.css";
 import { OrderStatus } from "../../../lib/data/enums/order.enum";
 import OrderService from "../../services/OrderService";
 import theme from "../../material/MaterialTheme";
+import { useGlobals } from "../../hooks/useGlobals";
 
 
 
@@ -29,6 +30,7 @@ const actionDispatch = (dispatch: Dispatch) => ({
 
 export default function OrdersPage() {
   const { setPausedOrders, setProcessOrders, setFinishedOrders  } = actionDispatch(useDispatch());
+  const { orderBuilder } = useGlobals();
   const [value, setValue] = useState("1");
 
   const [ordeInquiry, setOrderInquiry] = useState<OrderInquiry>({
@@ -40,20 +42,20 @@ export default function OrdersPage() {
   useEffect(() => {
     const order = new OrderService();
     order
-      .getMyOreder({ ...ordeInquiry, orderStatus: OrderStatus.PAUSE })
+      .getMyOrder({ ...ordeInquiry, orderStatus: OrderStatus.PAUSE })
       .then((data) => setPausedOrders(data))
       .catch((err) => console.log(err));
 
       order
-      .getMyOreder({ ...ordeInquiry, orderStatus: OrderStatus.PROCESS })
+      .getMyOrder({ ...ordeInquiry, orderStatus: OrderStatus.PROCESS })
       .then((data) => setProcessOrders(data))
       .catch((err) => console.log(err));
 
       order
-      .getMyOreder({ ...ordeInquiry, orderStatus: OrderStatus.FINISH })
+      .getMyOrder({ ...ordeInquiry, orderStatus: OrderStatus.FINISH })
       .then((data) => setFinishedOrders(data))
       .catch((err) => console.log(err));
-  }, [ordeInquiry]);
+  }, [ordeInquiry, orderBuilder]);
 
   /** HANDLERS **/
 
@@ -83,8 +85,8 @@ export default function OrdersPage() {
           </Box>
           <Divider height= "2" width="679" bg="#a1a1a1"/>
           <Stack className="order-main-content">
-            <PausedOrders />
-            <ProcessOrders />
+            <PausedOrders setValue={setValue} />
+            <ProcessOrders setValue={setValue}/>
             <FinishedOrders />
           </Stack>
         </TabContext>
