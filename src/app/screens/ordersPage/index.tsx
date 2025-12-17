@@ -17,6 +17,8 @@ import { OrderStatus } from "../../../lib/data/enums/order.enum";
 import OrderService from "../../services/OrderService";
 import theme from "../../material/MaterialTheme";
 import { useGlobals } from "../../hooks/useGlobals";
+import { useHistory } from "react-router-dom";
+import { serverApi } from "../../../lib/data/config";
 
 
 
@@ -29,9 +31,12 @@ const actionDispatch = (dispatch: Dispatch) => ({
 
 
 export default function OrdersPage() {
+  const history = useHistory();
   const { setPausedOrders, setProcessOrders, setFinishedOrders  } = actionDispatch(useDispatch());
-  const { orderBuilder } = useGlobals();
+  const { orderBuilder, authMember } = useGlobals();
   const [value, setValue] = useState("1");
+
+  
 
   const [ordeInquiry, setOrderInquiry] = useState<OrderInquiry>({
     page: 1,
@@ -63,6 +68,8 @@ export default function OrdersPage() {
   const handleChange = (e: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  if(!authMember) history.push("/");
 
   return <div className={"orders-page"}>
     <Container className="order-container">
@@ -97,18 +104,23 @@ export default function OrdersPage() {
       <Stack className="order-right">
         <Stack className="user-info-box">
           <Box className={"user-pic"}>
-            <img  src="img/justin.webp" />
+            <img  src={ authMember?.memberImage ? `${serverApi}/${authMember.memberImage}`
+                : "/icons/default-user.svg"
+              } 
+              />
           </Box>
           <Box className={"user-name"}>
-            Justin
+            {authMember?.memberNick}
           </Box>
           <Box className={"user-status"}>
-            USER
+            {authMember?.memberType}
           </Box>
           <Divider height= "2" width="332" bg="#a1a1a1"/>
           <Box className={"user-location"}>
             <LocationOnIcon/> 
-            <Box className={"location"}>South Korea, Busan</Box>
+            <Box className={"location"}>
+              {authMember?.memberAddress ? authMember.memberAddress : "Do not exist" }
+            </Box>
           </Box>
 
         </Stack>
