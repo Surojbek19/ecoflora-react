@@ -99,6 +99,7 @@ export default function Products(props: ProductsProps) {
     }
 
     const chooseDishHnadler =(id: string) => {
+        console.log("productId:", id)
         history.push(`/products/${id}`)
     }
 
