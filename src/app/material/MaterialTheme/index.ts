@@ -2,29 +2,28 @@ import { createTheme } from '@mui/material/styles';
 import { common } from '@mui/material/colors';
 import shadow from './shadow';
 import typography from './typography';
-import { maxWidth } from '@mui/system';
 
 /**
  * LIGHT THEME (DEFAULT)
  */
 const light = {
 	palette: {
-		type: 'light',
+		mode: 'light' as const, // ✅ MUI v5 uses "mode", not "type"
 		background: {
-			default: '#f8f8ff',
+			default: '#f6f8f5',
 			paper: common.white,
 		},
 		primary: {
-			contrastText: '#d7b586',
-			main: '#343434',
+			contrastText: common.white,
+			main: '#1f3d2b', // deep forest
 		},
 		secondary: {
-			contrastText: '#343434',
-			main: '#d7b586',
+			contrastText: '#1f3d2b',
+			main: '#7fb77e', // soft leaf green
 		},
 		text: {
-			primary: '#343434',
-			secondary: '#d7b586',
+			primary: '#1f2d22',
+			secondary: '#4f6b57',
 			dark: common.black,
 		},
 	},

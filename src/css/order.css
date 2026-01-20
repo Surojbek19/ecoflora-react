@@ -1,6 +1,7 @@
-p{
+p {
     display: inline-block;
 }
+
 .orders-page {
     position: relative;
     width: 100%;
@@ -28,7 +29,7 @@ p{
     width: 679px;
     height: 49px;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     margin-bottom: 10px;
 }
 
@@ -51,8 +52,8 @@ p{
     align-items: center;
     margin-top: 90px;
     border-radius: 15px;
-    box-shadow: 15px 12px rgba(187, 187,191, 0.5),
-    inset 0px 0px 15px 2px #D4D5E9;
+    box-shadow: 15px 12px rgba(187, 187, 191, 0.5),
+        inset 0px 0px 15px 2px #D4D5E9;
 }
 
 .orders-page .order-container .order-right .user-info-box .user-pic {
@@ -90,7 +91,7 @@ p{
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     padding-left: 30px;
     padding-top: 10px;
 
@@ -108,8 +109,8 @@ p{
     align-items: center;
     margin-top: 23px;
     border-radius: 15px;
-    box-shadow: 15px 12px rgba(187, 187,191, 0.5),
-    inset 0px 0px 15px 2px #D4D5E9;
+    box-shadow: 15px 12px rgba(187, 187, 191, 0.5),
+        inset 0px 0px 15px 2px #D4D5E9;
 }
 
 .orders-page .order-container .order-right .user-card-info .card-num input {
@@ -130,7 +131,7 @@ p{
     width: 162px;
     height: 40px;
     margin-top: 10px;
-     border-radius: 7px;
+    border-radius: 7px;
     border: 1px solid rgb(185, 183, 183);
 }
 
@@ -177,8 +178,8 @@ p{
 
 .orders-page .order-container .order-left .order-main-content .order-main-box {
     margin-bottom: 40px;
-    box-shadow: 15px 12px rgba(187, 187,191, 0.5),
-    inset 0px 0px 15px 2px #D4D5E9;
+    box-shadow: 15px 12px rgba(187, 187, 191, 0.5),
+        inset 0px 0px 15px 2px #D4D5E9;
     border-radius: 15px;
     padding: 20px;
     /* background-color: blue; */
@@ -208,10 +209,10 @@ p{
 }
 
 .orders-page .order-container .order-left .order-main-content .order-main-box .order-box-scroll .orders-name-price .price-box {
-  display: flex;
-  flex-direction: row;
-  width: 220px;
-  margin-right: 70px;
+    display: flex;
+    flex-direction: row;
+    width: 220px;
+    margin-right: 70px;
 }
 
 .orders-page .order-container .order-left .order-main-content .total-price-box {

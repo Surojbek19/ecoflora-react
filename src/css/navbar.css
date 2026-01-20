@@ -1,162 +1,162 @@
+/* ===== Home Navbar (EcoFlora) ===== */
+
 .home-navbar {
-    width: 100%;
-    height: 773px;
-    display: flex;
-    background: url('/public/img/banner.webp');
-    background-size: cover;
+  width: 100%;
+  height: 773px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
 }
 
 .home-navbar .navbar-container {
-    margin-top: 55px;
-    height: 642px;
+  margin-top: 24px;
+  height: 642px;
 }
 
-.home-navbar .navbar-container .menu {
-   height: 50px;
-   display: flex;
-   flex-direction: row;
-   justify-content: space-between;
-   align-items: center;
-}
-
-.home-navbar .navbar-container .menu .brand-logo {
-   width: 125px;
-   height: 30px;
-}
-
-.home-navbar .navbar-container .menu .links {
-  min-width: 700px;
+/* ===== TOP MENU ===== */
+.home-navbar .menu {
+  height: 60px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 
-.home-navbar .navbar-container .menu .links .login-button {
-  background: #3776CC;
-  color: #f8f8ff;
+.home-navbar .brand-link {
+  text-decoration: none;
 }
 
-.home-navbar .navbar-container .menu .user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 24px;
+.home-navbar .brand-text {
+  font-size: 28px;
+  font-weight: 900;
+  color: #111;
+  letter-spacing: 0.2px;
+}
+
+/* links */
+.home-navbar .links {
+  min-width: 620px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 24px;
+  align-items: center;
 }
 
 .home-navbar a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .home-navbar .hover-line a {
-    color: #f8f8ff;
-    z-index: 100;
+  color: #111;
+  font-weight: 600;
 }
 
 .home-navbar .underline {
-    display: block;
-    content: "";
-    border-bottom: solid 2px #d7b686;
+  border-bottom: 2px solid #2e7d32;
+  padding-bottom: 4px;
 }
 
+/* hover underline animation */
 .home-navbar .hover-line:after {
-    display: block;
-    content: "";
-    border-bottom: solid 2px #d7b686;
-    transform: scaleX(0);
-    transition: transform 250ms ease-in-out;
+  display: block;
+  content: "";
+  border-bottom: solid 2px #2e7d32;
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
 }
 
 .home-navbar .hover-line:hover:after {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
 
 .home-navbar div.hover-line:after {
-    transform-origin: 0% 50%;
+  transform-origin: 0% 50%;
 }
 
-
-.home-navbar .navbar-container .header-frame {
-    margin-top: 142px;
-    height: 462px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+/* auth buttons */
+.home-navbar .auth-buttons .login-button {
+  border-color: #2e7d32 !important;
+  color: #111 !important;
+  background: transparent !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  border-radius: 8px !important;
 }
 
-.home-navbar .navbar-container .header-frame .detail {
-    width: 510px;
-    display: flex;
-    flex-direction: column;
+.home-navbar .auth-buttons .signup-button {
+  background: #1f3d2b !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  border-radius: 8px !important;
 }
 
-.home-navbar .navbar-container .header-frame .detail .head-main-txt {
-    width: 450px;
-    height: 150px;
-    font-family: "Roboto Serif";
-    font-size: 50px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: -0.75px;
-    color: #f8f8ff;
+.home-navbar .user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  object-fit: cover;
+  cursor: pointer;
 }
 
-.home-navbar .navbar-container .header-frame .detail .wel-txt {
-    width: 510px;
-    height: 42px;
-    font-family: "Roboto Serif";
-    font-size: 36px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: -0.54px;
-    color: #d7b686;
+/* ===== HERO BOX (center box like screenshot) ===== */
+.home-navbar .header-frame {
+  margin-top: 110px;
+  height: 520px;
+  position: relative;
 }
 
-.home-navbar .navbar-container .header-frame .detail .service-txt {
-    margin-top: 23px;
-    width: 153px;
-    height: 23px;
-    font-family: "Roboto Serif";
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: -0.3px;
-    color: #d5d5d5;
+.home-navbar .hero-box {
+  width: 860px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+  padding: 70px 60px;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(1px);
 }
 
-.home-navbar .navbar-container .detail .signup {
-    margin-top: 73px;
+.home-navbar .hero-tag {
+  font-size: 18px;
+  opacity: 0.95;
+  margin-bottom: 10px;
 }
 
-.home-navbar .navbar-container .detail .signup .signup-button {
-   width: 210px;
-   height: 60px;
-   border-radius: 4px;
-   background: #1976d2;
-   text-align: center;
-   font-family: Poppins;
-   font-size: 17px;
-   font-style: normal;
-   font-weight: 400;
-   line-height: normal;
-   color: #f8f8ff;
+.home-navbar .hero-title {
+  font-size: 54px;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
-.home-navbar .navbar-container .logo-frame {
-    margin-top: 43px;
-    width: 690px;
-    height: 419px;
+.home-navbar .hero-sub {
+  margin-top: 14px;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
-.home-navbar .navbar-container .logo-frame {
-    width: 100%;
-    height: 100%;
-    background: url("/public/img/logo.webp");
-    background-size: contain;
-    background-repeat: no-repeat;
-    filter: invert(25%);
+.home-navbar .hero-btn {
+  margin-top: 20px !important;
+  background: #fff !important;
+  color: #111 !important;
+  border-radius: 0 !important;
+  padding: 10px 24px !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+}
+
+/* small screens */
+@media (max-width: 900px) {
+  .home-navbar .links {
+    min-width: 0;
+    gap: 14px;
+  }
+
+  .home-navbar .hero-title {
+    font-size: 38px;
+  }
 }
 
 
@@ -165,28 +165,28 @@
 /******OTHER NAVBAR *******/
 
 .other-navbar {
-    width: 100%;
-    height: 400px;
-    display: flex;
-    background: url('/public/img/banner.webp');
-    background-size: cover;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  background: url('/public/img/banner.webp');
+  background-size: cover;
 }
 
 .other-navbar .navbar-container {
-    margin-top: 55px;
+  margin-top: 55px;
 }
 
 .other-navbar .navbar-container .menu {
-   height: 50px;
-   display: flex;
-   flex-direction: row;
-   justify-content: space-between;
-   align-items: center;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .other-navbar .navbar-container .menu .brand-logo {
-   width: 125px;
-   height: 30px;
+  width: 125px;
+  height: 30px;
 }
 
 .other-navbar .navbar-container .menu .links {
@@ -209,34 +209,34 @@
 }
 
 .other-navbar a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .other-navbar .hover-line a {
-    color: #f8f8ff;
-    z-index: 100;
+  color: #f8f8ff;
+  z-index: 100;
 }
 
 .other-navbar .underline {
-    display: block;
-    content: "";
-    border-bottom: solid 2px #d7b686;
+  display: block;
+  content: "";
+  border-bottom: solid 2px #d7b686;
 }
 
 .other-navbar .hover-line:after {
-    display: block;
-    content: "";
-    border-bottom: solid 2px #d7b686;
-    transform: scaleX(0);
-    transition: transform 250ms ease-in-out;
+  display: block;
+  content: "";
+  border-bottom: solid 2px #d7b686;
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
 }
 
 .other-navbar .hover-line:hover:after {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
 
 .other-navbar div.hover-line:after {
-    transform-origin: 0% 50%;
+  transform-origin: 0% 50%;
 }
 
 
@@ -304,8 +304,7 @@
   color: #ae0000;
 }
 
-.basket-info-box
-  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+.basket-info-box .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 6.5px 14px;
 }
 
