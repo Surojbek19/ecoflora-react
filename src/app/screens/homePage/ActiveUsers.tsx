@@ -1,62 +1,78 @@
 import React from "react";
 import { Box, Container, Stack } from "@mui/material";
-import Divider from "@mui/joy/Divider";
-import CardContent from "@mui/joy/CardContent";
 import Card from "@mui/joy/Card";
-import { CssVarsProvider, Typography } from "@mui/joy";
+import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
 import AspectRatio from "@mui/joy/AspectRatio";
+import { CssVarsProvider, Typography } from "@mui/joy";
 
+type Expert = {
+  id: string;
+  name: string;
+  role: string;
+  img: string; // put images in public/img/
+};
 
-import { useSelector } from "react-redux";
-import { createSelector } from "reselect";
-import { retrieveTopUsers } from "./selector"
-import { serverApi } from "../../../lib/data/config";
-import { Member } from "../../../lib/data/types/member";
+const experts: Expert[] = [
+  {
+    id: "e1",
+    name: "Lina Park",
+    role: "Plant Care Specialist",
+    img: "/img/expert3.JPG",
+  },
+  {
+    id: "e2",
+    name: "Daniel Hemolto",
+    role: "Greenhouse Manager",
+    img: "/img/expert2.jpg",
+  },
+  {
+    id: "e3",
+    name: "Leonard Allen",
+    role: "Indoor Plant Stylist",
+    img: "/img/expert1.JPG",
+  },
+  {
+    id: "e4",
+    name: "Alice Hamel",
+    role: "Customer Support",
+    img: "/img/expert4.jpg",
+  },
+];
 
-/** REDUX SLICE & SELECTOR **/
-const topUsersRetriever = createSelector(
-  retrieveTopUsers,
-  (topUsers) => ({topUsers}) 
-)
-
-
-
-export default function ActiveUsers(){
-  const { topUsers } = useSelector(topUsersRetriever);
-  
+export default function ActiveUsers() {
   return (
-    <div className={"active-users-frame"}>
+    <div className="experts-frame">
       <Container>
-        <Stack className={"main"}>
-          <Box className={"category-title"}>Active Users</Box>
-          <Stack className={"cards-frame"}>
-            <CssVarsProvider>
+        <Stack className="experts-main">
+          <Box className="experts-title">
+            <h2>Our Experts</h2>
+            <span className="experts-underline" />
+            <p className="experts-subtitle">
+              Real people who grow, select, and care for every plant we deliver.
+            </p>
+          </Box>
 
-              {topUsers.length !== 0 ? (
-                topUsers.map((member: Member) => {
-                  const imagePath = `${serverApi}/${member.memberImage}`
-                  return (
-                    <Card key={member._id} className={"card"} variant="outlined">
-                    <CardOverflow className="member-image">
-                      <AspectRatio ratio="1">
-                        <img src={imagePath} alt=""/>
-                      </AspectRatio>
-                    </CardOverflow>
-                    
-                    <CardContent className={"card-content"}>
-                      <Typography className={"member-name"}>{member.memberNick}</Typography>
-                    </CardContent>
-                  </Card>
-                    )
-                  })
-                 ) : (
-                    <Box className="no-data">No Active Users!</Box> 
-                  ) }
+          <Stack className="experts-cards" direction="row">
+            <CssVarsProvider>
+              {experts.map((expert) => (
+                <Card key={expert.id} className="expert-card" variant="outlined">
+                  <CardOverflow className="expert-image">
+                    <AspectRatio ratio="1">
+                      <img src={expert.img} alt={expert.name} />
+                    </AspectRatio>
+                  </CardOverflow>
+
+                  <CardContent className="expert-content">
+                    <Typography className="expert-name">{expert.name}</Typography>
+                    <Typography className="expert-role">{expert.role}</Typography>
+                  </CardContent>
+                </Card>
+              ))}
             </CssVarsProvider>
           </Stack>
         </Stack>
       </Container>
     </div>
-  )
+  );
 }

@@ -1,84 +1,70 @@
 import React from "react";
-import { Box, Container, Stack} from "@mui/material";
-import AspectRatio from "@mui/joy/AspectRatio";
-import Card from '@mui/joy/Card';
-import CardOverflow  from "@mui/joy/CardOverflow"
-import Typography from '@mui/joy/Typography';
-import { CssVarsProvider } from "@mui/joy/styles";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import Divider from "../../components/divider"
-
+import { Box, Container } from "@mui/material";
 
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { retrieveNewDishes } from "./selector"
+import { retrieveNewDishes } from "./selector";
 import { Product } from "../../../lib/data/types/product";
-import { serverApi } from "../../../lib/data/config";
-import { ProductCollection } from "../../../lib/data/enums/product.enum";
 
-/** REDUX SLICE & SELECTOR **/
-const newDishesRetriever = createSelector(
+const newProductsRetriever = createSelector(
   retrieveNewDishes,
-  (newDishes) => ({newDishes}) 
-)
+  (newDishes) => ({ newDishes })
+);
 
-export default function NewDishes(){
-  const { newDishes } = useSelector(newDishesRetriever)
-  
-  console.log("New Dishes:", newDishes)
+/** Temporary hardcoded cards (until backend ready) */
+const FALLBACK_PRODUCTS: Product[] = [
+  { _id: "f1", productPrice: 12.5 } as Product,
+  { _id: "f2", productPrice: 20.0 } as Product,
+  { _id: "f3", productPrice: 12.0 } as Product,
+  { _id: "f4", productPrice: 18.0 } as Product,
+];
+
+export default function NewProducts() {
+  const { newDishes } = useSelector(newProductsRetriever);
+
+  const productsToShow: Product[] =
+    newDishes && newDishes.length > 0
+      ? newDishes.slice(0, 4)
+      : FALLBACK_PRODUCTS;
+
   return (
-    <div className={"new-products-frame"}>
+    <Box className="new-products-frame-ui">
       <Container>
-        <Stack className={"main"}>
-          <Box className={"category-title"}>Fresh Menu</Box>
-          <Stack className={"cards-frame"}>
-            <CssVarsProvider>
+        <Box className="new-products-header">
+          <Box className="new-products-title">New Products</Box>
+          <Box className="new-products-subtitle">Fresh arrivals this week</Box>
+        </Box>
 
-              {newDishes.length !== 0 ? (
-                newDishes.map((product: Product) => {
-                  const imagePath = `${serverApi}/${product.productImages[0]}`;
-                  const sizeVolume = 
-                    product.productCollection === ProductCollection.DRINK 
-                    ? product.productVolume + " l"
-                    : product.productSize + " size"
-                  return (
-                    <Card key={product._id} variant="outlined" className={"card"}>
-                      <CardOverflow>
-                        <div className="product-sale">{ sizeVolume }</div>
-                        <AspectRatio ratio="1">
-                          <img src={ imagePath } alt="" />
-                        </AspectRatio>
-                      </CardOverflow>
-  
-                      <CardOverflow variant="soft" className="product-detail">
-                        <Stack className="info">
-                          <Stack flexDirection={"row"}>
-                            <Typography className={"title"}>
-                              {product.productName}
-                            </Typography>
-                            <Divider width="2" height="24" bg="#d9d9d9"/>
-                            <Typography className={"price"}>${product.productPrice}</Typography>
-                          </Stack>
-                          <Stack>
-                          <Typography className={"views"}>
-                            {product.productViews}
-                            <VisibilityIcon
-                              sx={{ fontSize:20, marginLeft: "5px"}}
-                            />
-                            </Typography>
-                          </Stack>
-                        </Stack>
-                      </CardOverflow>
-                    </Card>
-                  )
-                })
-              ) : (
-              <Box className="no-data">New products are not available!</Box>
-              ) }
-            </CssVarsProvider>
-          </Stack>
-        </Stack>
+        {productsToShow.length > 0 ? (
+          <Box className="new-products-grid">
+            {productsToShow.map((product: Product) => (
+              <Box key={product._id} className="new-product-card">
+                <Box className="new-product-imgWrap">
+                  <Box className="new-pill">NEW</Box>
+
+                  <img
+                    className="new-product-img"
+                    src="/img/monsteria.jpg"
+                    alt="monsteria"
+                  />
+                </Box>
+
+                <Box className="new-product-type">Indoor Plant</Box>
+
+                <Box className="new-product-name">Monsteria</Box>
+
+                <Box className="new-product-price">
+                  ${Number(product.productPrice ?? 0).toFixed(2)}
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        ) : (
+          <Box className="new-products-empty">
+            New products are not available!
+          </Box>
+        )}
       </Container>
-    </div>
-  )
+    </Box>
+  );
 }

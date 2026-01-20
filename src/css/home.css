@@ -50,404 +50,635 @@
   }
 }
 
-/** Populat Dishes **/
-.homepage .popular-dishes-frame {
-  width: 100%;
-  height: 580px;
-  display: flex;
-  background: #f8f8ff;
+/* =========================
+   Popular Products Section
+   ========================= */
+
+.popular-products-frame {
+  padding: 70px 0;
+  background: #ffffff;
 }
 
-.homepage .popular-dishes-frame .popular-section {
-  margin-top: 45px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.popular-products-header {
+  margin-bottom: 28px;
 }
 
-.homepage .popular-dishes-frame .popular-section .category-title {
+.popular-products-header {
+  margin-bottom: 28px;
   text-align: center;
-  font-family: "Roboto Serif";
-  font-size: 36px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: 1.44px;
-  color: #000;
+  font-size: 35px;
+  /* center text */
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 28px auto;
 }
 
-.homepage .popular-dishes-frame .popular-section .cards-frame {
-  width: 100%;
-  margin-top: 43px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.homepage .popular-dishes-frame .cards-frame .crad {
-  min-height: 430px;
-  min-width: 300px;
-  cursor: pointer;
-}
-
-
-.homepage .popular-dishes-frame .cards-frame .crad .crads-cover {
-  background: linear-gradient(to top,
-      rgba(0, 0, 0, 0.4),
-      rgba(0, 0, 0, 0) 200px),
-    linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 300px);
-}
-
-/* NEW PRODUCT css */
-.homepage .new-products-frame {
-  width: 100%;
-  height: 605px;
-  background: #f8f8ff;
-  display: flex;
-}
-
-.homepage .main {
-  margin-top: 45px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.homepage .new-products-frame .category-title {
-  font-family: "Dancing Script";
-  font-style: normal;
+.popular-products-title {
+  font-size: 28px;
   font-weight: 700;
-  font-size: 36px;
-  line-height: 43px;
+  color: #2d5b16;
 }
 
-.homepage .new-products-frame .main .cards-frame {
-  width: 100%;
-  margin: 47px 2px 2px 2px;
-  /* display: flex; */
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.homepage .new-products-frame .main .card {
-  height: 335px;
-  width: 290px;
-  cursor: pointer;
-}
-
-.homepage .new-products-frame .product-sale {
-  position: absolute;
+.popular-products-subtitle {
   margin-top: 10px;
-  z-index: 100;
-  width: 90px;
-  height: 30px;
+  color: #777;
+  font-size: 15px;
+  line-height: 1.6;
+  display: block;
+}
+
+
+.popular-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+}
+
+.popular-product-card {
+  background: #ffffff;
+  border-radius: 26px;
+}
+
+.popular-product-imgWrap {
+  background: #ffffff;
+  border-radius: 26px;
+  overflow: hidden;
+  cursor: pointer;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ff9200;
-  box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.1);
-  border-radius: 25px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 21px;
-  color: #f8f8ff;
+  border: solid rgb(198, 191, 191) 2px;
 }
 
-.homepage .new-products-frame .product-detail {
-  width: auto;
-  height: 49%;
-  display: flex;
-  justify-content: center;
-  margin-top: -12px;
-  border-top: 1px solid;
-  border-color: #f8f8ff;
-  background-color: #fafbfb;
+.popular-product-img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  transition: transform 0.35s ease;
 }
 
-.homepage .new-products-frame .product-detail .info {
-  width: 100%;
+
+.popular-product-card:hover .popular-product-img {
+  transform: scale(1.08);
+}
+
+.popular-product-meta {
+  margin-top: 14px;
   display: flex;
-  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
+}
+
+.popular-product-type {
+  color: #7d7d7d;
+  font-size: 15px;
+}
+
+.popular-product-views {
+  display: inline-flex;
   align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  color: #1f1f1f;
+  font-weight: 600;
 }
 
-.homepage .new-products-frame .product-detail .title {
-  width: 65px;
-  font-weight: 500;
+.popular-product-eye {
+  font-size: 20px !important;
+  color: #2d5b16;
 }
 
-.homepage .new-products-frame .product-detail .price {
-  margin-left: 10px;
-  width: 20px;
-  font-weight: 500;
-}
-
-.homepage .new-products-frame .product-detail .divider {
-  margin: 0 10px 0 10px;
-  width: 2px;
-  background-color: #d9d9d9;
-}
-
-.homepage .new-products-frame .product-detail .views {
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-}
-
-/* * ADVERTISEMENT */
-
-.homepage .ads-restaurant-frame {
-  width: 100%;
-  height: 693px;
-  display: flex;
-  overflow: hidden;
-  transform: perspective(0px);
-  box-shadow: -3px 0px 20px 14px #34343480;
-}
-
-.homepage .ads-restaurant-frame .ads-video {
-  width: 100%;
-  background: #0c0e12;
-  display: flex;
-  box-shadow: 0px -8px 90px rgb(215 215 255);
-  transform: scale(1.5);
-  overflow: hidden;
-}
-
-
-/* ACTIVE USERS */
-.homepage .active-users-frame {
-  width: 100%;
-  height: 500px;
-  background: #f8f8ff;
-  display: flex;
-}
-
-.homepage .active-users-frame .category-title {
-  font-family: "Dancing Script";
-  font-style: normal;
+.popular-product-name {
+  margin-top: 8px;
+  font-size: 26px;
   font-weight: 700;
-  font-size: 36px;
-  line-height: 43px;
+  color: #1f1f1f;
+  line-height: 1.2;
 }
 
-.homepage .active-users-frame .cards-frame {
+.popular-product-price {
+  margin-top: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f1f1f;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .popular-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .popular-products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* =========================
+   New Products Section
+   ========================= */
+
+.new-products-frame-ui {
+  padding: 70px 0;
+  background: #ffffff;
+}
+
+.new-products-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 28px auto;
+}
+
+.new-products-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d5b16;
+}
+
+.new-products-subtitle {
+  margin-top: 10px;
+  color: #777;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.new-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+}
+
+.new-product-card {
+  background: #ffffff;
+  border-radius: 26px;
+}
+
+.new-product-imgWrap {
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  cursor: pointer;
+  height: 300px;
+  background: #f3f5f4;
+  border: solid rgb(198, 191, 191) 2px;
+}
+
+.new-product-img {
   width: 100%;
-  margin-top: 57px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 14px;
-
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
 }
 
-.homepage .active-users-frame .cards-frame .card {
-  height: 335px;
-  width: 290px;
+.new-product-card:hover .new-product-img {
+  transform: scale(1.08);
+}
+
+/* Green NEW pill top-left */
+.new-pill {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #2d5b16;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+/* Under image */
+.new-product-type {
+  margin-top: 14px;
+  color: #7d7d7d;
+  font-size: 15px;
+}
+
+.new-product-name {
+  margin-top: 8px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f1f1f;
+  line-height: 1.2;
+}
+
+.new-product-price {
+  margin-top: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f1f1f;
+}
+
+.new-products-empty {
+  margin-top: 20px;
+  color: #777;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .new-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .new-products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================
+   Testimonials (What Our Clients Say)
+   ========================= */
+
+.testimonials-frame {
+  padding: 90px 0;
+  background: #ffffff;
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.testimonials-kicker {
+  color: #777;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.testimonials-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: #1f1f1f;
+  letter-spacing: -0.5px;
+}
+
+.testimonials-title span {
+  color: #2d5b16;
+  /* green like screenshot */
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+
+.testimonial-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 26px;
+  padding: 30px 30px 26px 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.testimonial-top {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 14px;
+}
+
+.testimonial-stars {
+  color: #f5b301;
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.testimonial-rating {
+  color: #1f1f1f;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.testimonial-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f1f1f;
+  margin-top: 6px;
+}
+
+.testimonial-text {
+  margin-top: 12px;
+  color: #777;
+  font-size: 16px;
+  line-height: 28px;
+  max-width: 95%;
+}
+
+.testimonial-footer {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  padding-top: 8px;
+}
+
+.testimonial-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e9e9e9;
+}
+
+.testimonial-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f1f1f;
+}
+
+.testimonial-role {
+  margin-top: 4px;
+  font-size: 16px;
+  color: #777;
+}
+
+/* Quote circles (subtle) */
+.testimonial-quotes {
+  position: absolute;
+  right: 26px;
+  top: 10px;
+  display: flex;
+  gap: 10px;
+  opacity: 0.15;
+}
+
+.testimonial-quotes span {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #d9d9d9;
+}
+
+/* Dots (like screenshot) */
+.testimonials-dots {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.testimonials-dots .dot {
+  width: 42px;
+  height: 4px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(0, 0, 0, 0.08);
   cursor: pointer;
 }
 
-.homepage .active-users-frame .cards-frame .card {
-  width: 271px;
-  height: 27px;
-  text-align: center;
+.testimonials-dots .dot.active {
+  background: #2d5b16;
 }
 
-.homepage .active-users-frame .cards-frame .card .member-name {
-  width: 100%;
-  margin: 0;
-  font-size: 12px;
-  font-weight: 700;
+/* Responsive */
+@media (max-width: 900px) {
+  .testimonials-title {
+    font-size: 36px;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-/** EVENTS **/
 
-.homepage .events-frame {
-  width: 100%;
-  height: 745px;
-  background: #f8f8ff;
-  display: flex;
+
+/* =========================
+   Our Experts (replace Active Users)
+   ========================= */
+
+.experts-frame {
+  padding: 80px 0;
+  background: #f7f9fb;
+  /* soft clean background like screenshot */
 }
 
-.homepage .events-frame .category-title {
-  font-family: "Dancing Script";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 43px;
-  padding-top: 20px;
-}
-
-.homepage .events-frame .events-main {
-  position: relative;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.experts-main {
   align-items: center;
 }
 
-.homepage .events-frame .events-main .events-text {
-  width: auto;
-  height: 70px;
+.experts-title {
+  text-align: center;
   margin-bottom: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
-.homepage .events-frame .events-main .prev-next-frame {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 250px;
-  margin: 40px 0 40px 0;
-  height: 25px;
+.experts-title h2 {
+  margin: 0;
+  font-size: 44px;
+  font-weight: 800;
+  color: #2d5b16;
 }
 
-.homepage .events-frame .dot-frame-pagination {
-  position: relative;
-  width: auto;
-  display: flex;
+.experts-underline {
+  display: block;
+  width: 70px;
+  height: 3px;
+  background: #2d5b16;
+  margin: 14px auto 0;
 }
 
-.homepage .events-frame .events-main .events-info {
+.experts-subtitle {
+  margin: 16px auto 0;
+  max-width: 680px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #6b6b6b;
+}
+
+.experts-cards {
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
 }
 
-.homepage .events-frame .events-info .events-info-frame {
-  position: relative;
-  width: 500px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.homepage .events-frame .events-img {
-  width: 100%;
-  height: 100%;
-  display: flex;
+/* Card style */
+.expert-card {
+  width: 280px;
   border-radius: 10px;
-  background-size: cover;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.homepage .events-frame .events-desc {
-  position: absolute;
-  margin-bottom: 7px;
-  padding: 10px;
-  display: flex;
-  width: 90%;
-  height: auto;
-  bottom: 5px;
-  background: #f8f8ff;
-  box-shadow: 0px 40px 30px rgba(25, 25, 46, 0.04);
-  border-radius: 8px;
+.expert-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
 }
 
-.homepage .events-frame .events-desc .events-bott {
-  width: 97%;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+/* Image */
+.expert-image img {
+  object-fit: cover;
 }
 
-.homepage .events-frame .events-desc .events-bott .bott-left {
+/* Bottom name bar */
+.expert-content {
+  text-align: center;
+  padding: 14px 12px;
+  background: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.expert-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1b1b1b;
+}
+
+.expert-role {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #2d5b16;
+  /* plant vibe */
+  font-weight: 600;
+}
+
+
+/* =========================
+   Latest Blog (Screenshot style)
+   ========================= */
+
+.latest-blog-frame {
+  background: #fff;
+  padding: 80px 0 70px;
+}
+
+.latest-blog-title {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.latest-blog-title h2 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 800;
+  color: #2d5b16;
+}
+
+.latest-blog-underline {
+  display: block;
+  width: 70px;
+  height: 3px;
+  background: #2d5b16;
+  margin: 12px auto 0;
+}
+
+.latest-blog-sliderWrap {
+  position: relative;
+}
+
+/* Card layout */
+.latest-blog-card {
+  background: transparent;
+}
+
+.latest-blog-imgWrap {
+  height: 300px;
+  /* adjust if you want bigger */
+  overflow: hidden;
+}
+
+.latest-blog-img {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
 }
 
-.homepage .events-frame .bott-left .event-title-speaker {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.latest-blog-imgWrap:hover .latest-blog-img {
+  transform: scale(1.07);
 }
 
-.homepage .events-frame .event-title-speaker .event-organizator {
+/* Date row */
+.latest-blog-date {
+  margin-top: 14px;
   display: flex;
   align-items: center;
+  gap: 8px;
+  color: #2d5b16;
+  font-size: 15px;
+  font-weight: 600;
 }
 
-.homepage .events-frame .event-title-speaker .event-organizator img {
-  width: 20px;
-  margin-right: 10px;
-}
-
-
-.homepage .events-frame .event-organizator .spec-text-author {
-  font-family: "GT Walsheim Pro";
-  font-style: normal;
-  line-height: 34px;
-  color: #140342;
-}
-
-.homepage .events-frame .bott-left .text-desc {
-  margin-top: 10px;
-  font-family: "GT Walsheim Pro";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 26px;
-  color: #4f547b;
-}
-
-.homepage .events-frame .bott-left .bott-info {
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: row;
-  width: 100%;
+.latest-blog-date img {
+  width: 16px;
   height: 16px;
 }
 
-.homepage .events-frame .bott-info .bott-info-main {
-  margin-left: 10px;
+/* Text */
+.latest-blog-cardTitle {
+  margin-top: 12px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
+}
+
+.latest-blog-desc {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #777;
+  max-width: 98%;
+}
+
+/* Arrows - like screenshot (square, centered vertically) */
+.latest-blog-prev,
+.latest-blog-next {
+  position: absolute;
+  top: 140px;
+  /* aligns around image center */
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.18);
   display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  width: auto;
-  height: 100%;
-  font-family: "GT Walsheim Pro";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 16px;
-  color: #4f547b;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  cursor: pointer;
+  z-index: 10;
 }
 
-.homepage .events-frame .bott-info .bott-info-main img {
-  margin-right: 10px;
+.latest-blog-prev {
+  left: -60px;
 }
 
-.homepage .events-frame .swiper-wrapper {
-  display: flex;
-  flex-direction: row;
+.latest-blog-next {
+  right: -60px;
 }
 
-.homepage .events-frame .swiper-pagination-bullet {
-  margin-right: 5px;
-  width: 8px;
-  height: 8px;
-  text-align: center;
-  opacity: 1;
-  background: #f8f8ff;
-  border-radius: 50%;
+/* Responsive arrow placement */
+@media (max-width: 1200px) {
+  .latest-blog-prev {
+    left: 0;
+  }
+
+  .latest-blog-next {
+    right: 0;
+  }
 }
 
-.homepage .events-frame .swiper-pagination-bullet-active {
-  background: #343434;
-  border-radius: 50%;
+/* Separator line at bottom */
+.latest-blog-separator {
+  margin-top: 60px;
+  height: 1px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.10);
 }

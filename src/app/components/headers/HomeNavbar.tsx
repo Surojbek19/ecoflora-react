@@ -133,10 +133,10 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                 {/* ===== Hero (same component, only UI) ===== */}
                 <Stack className="header-frame">
                     <Box className="hero-box">
-                        <Box className="hero-tag">#latest trend 2026</Box>
-                        <Box className="hero-title">BEST OUTDOOR PLANT</Box>
+                        <Box className="hero-tag">Plant trends 2026</Box>
+                        <Box className="hero-title">BRING NATURE HOME</Box>
                         <Box className="hero-sub">
-                            Indoor & outdoor plants for calm, beautiful spaces.
+                            Indoor & outdoor plants for calm, balanced living
                         </Box>
 
                         <Button
@@ -144,7 +144,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                             className="hero-btn"
                             onClick={() => (window.location.href = "/products")}
                         >
-                            Read More
+                            Discover More
                         </Button>
                     </Box>
                 </Stack>

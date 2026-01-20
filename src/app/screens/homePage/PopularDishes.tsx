@@ -1,100 +1,52 @@
 import React from "react";
-import { Box, Container, Stack } from "@mui/material";
-import Card from '@mui/joy/Card';
-import CardCover from '@mui/joy/CardCover';
-import CardContent from '@mui/joy/CardContent';
-import Typography from '@mui/joy/Typography';
-import { CssVarsProvider } from "@mui/joy/styles";
-import CardOverflow from "@mui/joy/CardOverflow";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import { Box, Container } from "@mui/material";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
-import { useSelector } from "react-redux";
-import { createSelector } from "reselect";
-import { retrievePopularDishes } from "./selector"
-import { Product } from "../../../lib/data/types/product";
-import { serverApi } from "../../../lib/data/config";
+export default function PopularProducts() {
+    const cards = [
+        { id: 1, views: 1240, price: "$12.50" },
+        { id: 2, views: 980, price: "$20.00" },
+        { id: 3, views: 1450, price: "$12.00" },
+        { id: 4, views: 760, price: "$18.00" },
+    ];
 
-/** REDUX SLICE & SELECTOR **/
-const polularDishesRetriever = createSelector(
-  retrievePopularDishes,
-  (popularDishes) => ({popularDishes}) 
-);
-
-
-export default function PopularDishes() {
-    const { popularDishes } = useSelector(polularDishesRetriever)
     return (
-    <div  className="popular-dishes-frame">
-        <Container>
-            <Stack className="popular-section">
-                <Box className="category-title">Polulat Dishes</Box>
-                <Stack className="cards-frame">
-                   {popularDishes.map((product: Product) => {
-                    const imagePath = `${serverApi}/${product.productImages[0]}`
-                    return (
-                        <CssVarsProvider key={product._id}>
-                            <Card className={"crad"}>
-                                <CardCover>
-                                    <img src={ imagePath } alt="" />
-                                </CardCover>
-                                <CardCover  className={"card-cover"} />
-                                <CardContent sx={{justifyContent: "flex-end"}}>
-                                <Stack
-                                flexDirection={"row"}
-                                justifyContent={"space-between"}
-                                >
-                                    <Typography
-                                    level="h2"
-                                        sx={{
-                                            fontSize: "lg",
-                                            color: "#fff",
-                                            mb: 1,
-                                        }}
-                                    >
-                                        {product.productName}
-                                    </Typography>
-                                    <Typography 
-                                    sx={{
-                                        fontWeight: "md",
-                                        color: "neutral.300",
-                                        alignItems: "center",
-                                        display: "flex",
-                                    }}
-                                    >
-                                        {product.productViews}
-                                        <VisibilityIcon 
-                                        sx={{ fontSize: 25 , marginLeft: "5px"}}
-                                        />
-                                    </Typography>
-                                </Stack>
-                                </CardContent>
-                                <CardOverflow 
-                                sx={{
-                                    display: "flex",
-                                    gap: 1.5,
-                                    py: 1.5,
-                                    px: "var(--Crad-padding)",
-                                    borderTop: "1px solid",
-                                    height: "60px",                            
-                                }}
-                                >
-                                    <Typography
-                                    startDecorator={<DescriptionOutlinedIcon />}
-                                    textColor={"neutral.300"}
-                                    >
-                                        {product.productDesc}
-                                    </Typography>
+        <Box className="popular-products-frame">
+            <Container>
+                <Box className="popular-products-header">
+                    <Box className="popular-products-title">Popular Products</Box>
+                    <Box className="popular-products-subtitle">
+                        Most viewed plants right now
+                    </Box>
+                </Box>
 
-                                </CardOverflow>
-                            </Card>
+                <Box className="popular-products-grid">
+                    {cards.map((c) => (
+                        <Box key={c.id} className="popular-product-card">
+                            <Box className="popular-product-imgWrap">
+                                {/* image name has space, keep it EXACT */}
+                                <img
+                                    className="popular-product-img"
+                                    src="/img/default-product.JPG"
+                                    alt="default product"
+                                />
+                            </Box>
 
-                        </CssVarsProvider>
-                    )
-                   })}
-                </Stack>
-            </Stack>
-        </Container>
-    </div>
-    )
+                            <Box className="popular-product-meta">
+                                <span className="popular-product-type">Indoor Plant</span>
+
+                                <span className="popular-product-views">
+                                    <VisibilityOutlinedIcon className="popular-product-eye" />
+                                    {c.views}
+                                </span>
+                            </Box>
+
+                            <Box className="popular-product-name">Plant</Box>
+                            <Box className="popular-product-price">{c.price}</Box>
+                        </Box>
+                    ))}
+                </Box>
+            </Container>
+        </Box>
+    );
 }
