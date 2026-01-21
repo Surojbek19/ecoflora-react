@@ -140,7 +140,7 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                 <Stack className="header-frame">
                     <Box className="hero-box">
                         <Box className="hero-tag">Explore EcoFlora</Box>
-                        <Box className="hero-title">OUR PLANTS</Box>
+                        <Box className="hero-title">LET'S BE GREEN</Box>
                         <Box className="hero-sub">
                             Browse curated indoor & outdoor plants for your next space
                         </Box>

@@ -77,8 +77,8 @@
 /* auth buttons */
 .home-navbar .auth-buttons .login-button {
   border-color: #2e7d32 !important;
-  color: #111 !important;
-  background: transparent !important;
+  color: white !important;
+  background: #1f3d2b !important;
   font-weight: 700 !important;
   text-transform: none !important;
   border-radius: 8px !important;
