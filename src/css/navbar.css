@@ -164,48 +164,53 @@
 
 /******OTHER NAVBAR *******/
 
+/* ===========================
+   OtherNavbar CSS (matches HomeNavbar style)
+   =========================== */
+
 .other-navbar {
   width: 100%;
-  height: 400px;
-  display: flex;
-  background: url('/public/img/banner.webp');
+  height: 660px;
+  /* less than Home (773px), but still tall enough */
   background-size: cover;
+  background-position: center;
+  display: flex;
 }
 
 .other-navbar .navbar-container {
-  margin-top: 55px;
+  margin-top: 24px;
+  height: 560px;
 }
 
-.other-navbar .navbar-container .menu {
-  height: 50px;
+/* ===== TOP MENU ===== */
+.other-navbar .menu {
+  height: 60px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 
-.other-navbar .navbar-container .menu .brand-logo {
-  width: 125px;
-  height: 30px;
+.other-navbar .brand-link {
+  text-decoration: none;
 }
 
-.other-navbar .navbar-container .menu .links {
-  min-width: 700px;
+.other-navbar .brand-text {
+  font-size: 28px;
+  font-weight: 900;
+  color: #111;
+  letter-spacing: 0.2px;
+}
+
+/* links */
+.other-navbar .links {
+  min-width: 620px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 24px;
   align-items: center;
-}
-
-.other-navbar .navbar-container .menu .links .login-button {
-  background: #3776CC;
-  color: #f8f8ff;
-}
-
-.other-navbar .navbar-container .menu .user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 24px;
+  margin-right: 100px;
 }
 
 .other-navbar a {
@@ -213,20 +218,20 @@
 }
 
 .other-navbar .hover-line a {
-  color: #f8f8ff;
-  z-index: 100;
+  color: #111;
+  font-weight: 600;
 }
 
 .other-navbar .underline {
-  display: block;
-  content: "";
-  border-bottom: solid 2px #d7b686;
+  border-bottom: 2px solid #2e7d32;
+  padding-bottom: 4px;
 }
 
+/* hover underline animation */
 .other-navbar .hover-line:after {
   display: block;
   content: "";
-  border-bottom: solid 2px #d7b686;
+  border-bottom: solid 2px #2e7d32;
   transform: scaleX(0);
   transition: transform 250ms ease-in-out;
 }
@@ -239,137 +244,84 @@
   transform-origin: 0% 50%;
 }
 
-
-/* BASKET */
-
-.basket-frame {
-  position: relative;
-  padding: 10px 4px 0px 4px;
-  width: 450px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  background: #f8f8ff;
-  border-radius: 16px;
+.other-navbar .auth-buttons .login-button {
+  color: white !important;
+  background: #1f3d2b !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  border-radius: 8px !important;
 }
 
-.basket-frame .all-check-box {
-  padding: 0px 6px;
-  width: 100%;
-  height: 35px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background: #d7b586;
-  border-width: 1px 0px;
-  border-style: solid;
-  border-color: #343434;
-}
 
-.basket-frame .basket-info-box {
-  position: relative;
-  margin-top: 6px;
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
 
-.basket-info-box .product-img {
-  width: 60px;
-  height: 60px;
-  filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25));
-  border-radius: 29px;
-}
 
-.basket-info-box .product-name {
-  margin-left: 11px;
-  width: 185px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 30px;
-  color: #000000;
-}
-
-.basket-info-box .product-price {
-  width: 80px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 22px;
-  color: #ae0000;
-}
-
-.basket-info-box .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
-  padding: 6.5px 14px;
-}
-
-.basket-info-box .css-ece9u5 {
-  min-width: 72px;
-}
-
-.basket-frame .cancel-btn {
-  position: absolute;
-  top: 33%;
-  right: 2%;
+/* avatar */
+.other-navbar .user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  object-fit: cover;
   cursor: pointer;
 }
 
-.basket-frame .basket-order {
-  margin-top: 10px;
-  width: 100%;
-  height: 64px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.5);
-}
-
-.basket-order .price {
-  width: 200px;
-  display: flex;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 30px;
-  color: #000000;
-}
-
-.basket-frame .orders-wrapper {
+/* ===== HERO BOX (same square look, slightly less top space) ===== */
+.other-navbar .header-frame {
+  margin-top: 90px;
+  /* slightly less than Home's 110px */
+  height: 360px;
   position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
 }
 
-.basket-frame .orders-wrapper::-webkit-scrollbar {
-  width: 10px;
+.other-navbar .hero-box {
+  width: 860px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+  padding: 62px 60px;
+  /* slightly smaller than Home */
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(1px);
 }
 
-.basket-frame .orders-wrapper::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 5px;
+.other-navbar .hero-tag {
+  font-size: 18px;
+  opacity: 0.95;
+  margin-bottom: 10px;
 }
 
-.basket-frame .orders-wrapper::-webkit-scrollbar-track {
-  background: #f1f1f1;
+.other-navbar .hero-title {
+  font-size: 50px;
+  /* slightly smaller than Home's 54px */
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
-.basket-frame .orders-main-wrapper {
-  position: relative;
-  overflow: hidden;
-  margin-top: 10px;
-  width: 100%;
-  height: 260px;
-  display: flex;
-  flex-direction: column;
+.other-navbar .hero-sub {
+  margin-top: 14px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.other-navbar .hero-btn {
+  margin-top: 20px !important;
+  background: #fff !important;
+  color: #111 !important;
+  border-radius: 0 !important;
+  padding: 10px 24px !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+}
+
+/* small screens */
+@media (max-width: 900px) {
+  .other-navbar .links {
+    min-width: 0;
+    gap: 14px;
+  }
+
+  .other-navbar .hero-title {
+    font-size: 36px;
+  }
 }

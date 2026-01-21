@@ -1,10 +1,13 @@
+import React from "react";
 import { Box, Button, Container, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
+import { Logout } from "@mui/icons-material";
 import { CartItem } from "../../../lib/data/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
 import { serverApi } from "../../../lib/data/config";
-import { Logout } from "@mui/icons-material";
+
+// IMPORTANT: import OtherNavbar css (separate from navbar.css)
 
 interface OtherNavbarProps {
     cartItems: CartItem[];
@@ -12,7 +15,7 @@ interface OtherNavbarProps {
     onRemove: (item: CartItem) => void;
     onDelete: (item: CartItem) => void;
     onDeleteAll: () => void;
-    setSignupOpen: (isOpen: boolean) => void;
+    setSignupOpen: (isOpen: boolean) => void; // KEEP (logic/props compatibility)
     setLoginOpen: (isOpen: boolean) => void;
     handleLogoutClick: (e: React.MouseEvent<HTMLElement>) => void;
     anchorEl: HTMLElement | null;
@@ -21,119 +24,137 @@ interface OtherNavbarProps {
 }
 
 export default function OtherNavbar(props: OtherNavbarProps) {
-    const { 
-        cartItems, 
-        onAdd, 
-        onRemove, 
-        onDelete, 
-        onDeleteAll, 
-        setSignupOpen, 
-        setLoginOpen, 
-        handleCloseLogout, 
-        handleLogoutClick, 
+    const {
+        cartItems,
+        onAdd,
+        onRemove,
+        onDelete,
+        onDeleteAll,
+        setSignupOpen, // KEEP (unused on purpose)
+        setLoginOpen,
+        handleCloseLogout,
+        handleLogoutClick,
         anchorEl,
         handleLogoutRequest,
     } = props;
+
     const { authMember } = useGlobals();
-    return <div className="other-navbar">
-        <Container className="navbar-container">
-            <Stack className="menu">
-                <Box>
-                    <NavLink to="/">
-                        <img className="brand-logo" src="/icons/burak.svg"/>
-                    </NavLink>
-                </Box>
-                <Stack className="links">
-                    <Box className={"hover-line"}>
-                        <NavLink to="/">Home</NavLink>
-                    </Box>
-                     <Box className={"hover-line"}>
-                        <NavLink to="/products" activeClassName={"underline"}>Products</NavLink>
-                    </Box>
-                    {authMember  ? (
-                        <Box className={"hover-line"}>
-                            <NavLink to="/orders" activeClassName={"underline"}>Orders</NavLink>
-                        </Box>
-                    ) : null}
-                     {authMember ? (
-                        <Box className={"hover-line"}>
-                            <NavLink to="/member-page" activeClassName={"underline"}>My Page</NavLink>
-                        </Box>
-                    ) : null}
-                     <Box className={"hover-line"}>
-                        <NavLink to="/help" activeClassName={"underline"}>Help</NavLink>
-                    </Box>
-                    {/* Basket */}
-                    <Basket  
-                        cartItems={cartItems}
-                        onAdd = {onAdd}
-                        onRemove ={ onRemove }
-                        onDelete ={ onDelete }
-                        onDeleteAll ={ onDeleteAll }
-                    />
 
-                    {!authMember ? (
-                        <Box>
-                            <Button 
-                            variant="contained" 
-                            className="login-button"
-                            onClick={() => setLoginOpen(true)}
-                            >
-                            Login
-                            </Button>
+    return (
+        <div
+            className="other-navbar"
+            style={{
+                backgroundImage: `url(${process.env.PUBLIC_URL}/img/plant-hero.jpg)`,
+            }}
+        >
+            <Container className="navbar-container">
+                {/* ===== TOP MENU (match HomeNavbar layout) ===== */}
+                <Stack className="menu">
+                    <Box className="brand">
+                        <NavLink to="/" className="brand-link">
+                            <span className="brand-text">EcoFlora</span>
+                        </NavLink>
+                    </Box>
+
+                    <Stack className="links">
+                        <Box className="hover-line">
+                            <NavLink to="/" exact activeClassName="underline">
+                                Home
+                            </NavLink>
                         </Box>
-                    ) : (
-                        <img className="user-avatar"
-                       src={authMember?.memberImage ? `${serverApi}/${authMember?.memberImage}` : "icons/default-user.svg"}
-                        aria-haspopup={"true"}
-                        onClick={handleLogoutClick}
+
+                        <Box className="hover-line">
+                            <NavLink to="/products" activeClassName="underline">
+                                Products
+                            </NavLink>
+                        </Box>
+
+                        <Box className="hover-line">
+                            <NavLink to="/help" activeClassName="underline">
+                                Help
+                            </NavLink>
+                        </Box>
+
+                        {/* Basket (same logic) */}
+                        <Basket
+                            cartItems={cartItems}
+                            onAdd={onAdd}
+                            onRemove={onRemove}
+                            onDelete={onDelete}
+                            onDeleteAll={onDeleteAll}
                         />
-                    )}
-                    <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={Boolean(anchorEl)}
-                        onClose={handleCloseLogout}
-                        onClick={handleCloseLogout}
-                        PaperProps={{
-                            elevation: 0,
-                            sx: {
-                                overflow: 'visible',
-                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                mt: 1.5,
-                                '& .MuiAvatar-root': {
-                                    width: 32,
-                                    height: 32,
-                                    ml: -0.5,
-                                    mr: 1,
-                                },
-                                '&:before': {
-                                    content: '""',
-                                    display: 'block',
-                                    position: 'absolute',
-                                    top: 0,
-                                    right: 14,
-                                    width: 10,
-                                    height: 10,
-                                    bgcolor: 'background.paper',
-                                    transform: 'translateY(-50%) rotate(45deg)',
-                                    zIndex: 0,
-                                },
-                            },
-                        }}
-                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                    >
-                        <MenuItem onClick={handleLogoutRequest}>
-                            <ListItemIcon>
-                                <Logout fontSize="small" style={{ color: 'blue' }} />
-                            </ListItemIcon>
-                            Logout
-                        </MenuItem>
-                    </Menu>
 
+                        {/* Auth (NO signup button on OtherNavbar) */}
+                        {!authMember ? (
+                            <Stack className="auth-buttons" direction="row" spacing={1.2}>
+                                <Button
+                                    variant="outlined"
+                                    className="login-button"
+                                    onClick={() => setLoginOpen(true)}
+                                >
+                                    Login
+                                </Button>
+
+                                {/* Keep logic/props, but DO NOT show signup */}
+                                {/* <Button
+                  variant="contained"
+                  className="signup-button"
+                  onClick={() => setSignupOpen(true)}
+                >
+                  Sign up
+                </Button> */}
+                            </Stack>
+                        ) : (
+                            <img
+                                className="user-avatar"
+                                src={
+                                    authMember?.memberImage
+                                        ? `${serverApi}/${authMember.memberImage}`
+                                        : "/icons/default-user.svg"
+                                }
+                                onClick={handleLogoutClick}
+                                alt="User"
+                            />
+                        )}
+
+                        <Menu
+                            anchorEl={anchorEl}
+                            id="account-menu"
+                            open={Boolean(anchorEl)}
+                            onClose={handleCloseLogout}
+                            onClick={handleCloseLogout}
+                            transformOrigin={{ horizontal: "right", vertical: "top" }}
+                            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                        >
+                            <MenuItem onClick={handleLogoutRequest}>
+                                <ListItemIcon>
+                                    <Logout fontSize="small" />
+                                </ListItemIcon>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </Stack>
                 </Stack>
-            </Stack>
-        </Container>
-    </div>
+
+                {/* ===== SQUARE (same style & placement as HomeNavbar) ===== */}
+                <Stack className="header-frame">
+                    <Box className="hero-box">
+                        <Box className="hero-tag">Explore EcoFlora</Box>
+                        <Box className="hero-title">OUR PLANTS</Box>
+                        <Box className="hero-sub">
+                            Browse curated indoor & outdoor plants for your next space
+                        </Box>
+
+                        {/* <Button
+                            variant="contained"
+                            className="hero-btn"
+                            onClick={() => (window.location.href = "/products")}
+                        >
+                            View Products
+                        </Button> */}
+                    </Box>
+                </Stack>
+            </Container>
+        </div>
+    );
 }
