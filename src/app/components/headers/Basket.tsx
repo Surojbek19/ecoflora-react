@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Menu from "@mui/material/Menu";
@@ -12,7 +12,6 @@ import { Messages, serverApi } from "../../../lib/data/config";
 import { sweetErrorHandling } from "../../../lib/data/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 import OrderService from "../../services/OrderService";
-
 
 interface BasketProps {
   cartItems: CartItem[];
@@ -38,7 +37,7 @@ export default function Basket(props: BasketProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  /** HANDLERS **/
+  /** HANDLERS (UNCHANGED) **/
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
@@ -52,19 +51,94 @@ export default function Basket(props: BasketProps) {
       if (!authMember) throw new Error(Messages.error2);
 
       const order = new OrderService();
-      await order.createOrder(cartItems)
+      await order.createOrder(cartItems);
 
       onDeleteAll();
-      history.push("/orders")
+      history.push("/orders");
 
       //REFRESH VIA CONTEXT
       setOrderBuilder(new Date());
     } catch (err) {
-      console.log(err)
-      sweetErrorHandling(err)
-        .then()
+      console.log(err);
+      sweetErrorHandling(err).then();
     }
-  }
+  };
+
+  // ====== GLASS UI (like auth modal) ======
+  const glassPaperSx = {
+    mt: 1.5,
+    overflow: "hidden",
+    borderRadius: "22px",
+    minWidth: 380,
+    maxWidth: 420,
+
+    // see-through glass
+    background: "rgba(255,255,255,0.08)",
+    border: "1px solid rgba(255,255,255,0.22)",
+    backdropFilter: "blur(22px)",
+    WebkitBackdropFilter: "blur(22px)",
+    boxShadow: "0 24px 60px rgba(0,0,0,0.35)",
+
+    // remove default MenuList padding
+    "& .MuiMenu-list": { p: 0 },
+
+    // arrow
+    "&:before": {
+      content: '""',
+      display: "block",
+      position: "absolute",
+      top: 0,
+      right: 18,
+      width: 12,
+      height: 12,
+      background: "rgba(255,255,255,0.10)",
+      borderLeft: "1px solid rgba(255,255,255,0.18)",
+      borderTop: "1px solid rgba(255,255,255,0.18)",
+      transform: "translateY(-50%) rotate(45deg)",
+      backdropFilter: "blur(18px)",
+      WebkitBackdropFilter: "blur(18px)",
+      zIndex: 0,
+    },
+  } as const;
+
+  const headerSx = {
+    px: 2,
+    py: 1.5,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderBottom: "1px solid rgba(255,255,255,0.18)",
+  } as const;
+
+  const itemCardSx = {
+    px: 2,
+    py: 1.2,
+    display: "grid",
+    gridTemplateColumns: "44px 1fr auto",
+    gap: 1.2,
+    alignItems: "center",
+    borderBottom: "1px solid rgba(255,255,255,0.12)",
+  } as const;
+
+  const qtyBtnSx = {
+    width: 30,
+    height: 30,
+    borderRadius: "10px",
+    border: "1px solid rgba(255,255,255,0.22)",
+    background: "rgba(255,255,255,0.08)",
+    color: "rgba(255,255,255,0.92)",
+    cursor: "pointer",
+    lineHeight: 1,
+  } as const;
+
+  const footerSx = {
+    px: 2,
+    py: 1.5,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 1.5,
+  } as const;
 
   return (
     <Box className={"hover-line"}>
@@ -80,90 +154,156 @@ export default function Basket(props: BasketProps) {
           <ShoppingCartIcon sx={{ color: "#2f5d50" }} />
         </Badge>
       </IconButton>
+
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
         onClose={handleClose}
-        // onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: "visible",
-            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-            mt: 1.5,
-            "& .MuiAvatar-root": {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
-            "&:before": {
-              content: '""',
-              display: "block",
-              position: "absolute",
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: "background.paper",
-              transform: "translateY(-50%) rotate(45deg)",
-              zIndex: 0,
-            },
-          },
-        }}
+        PaperProps={{ elevation: 0, sx: glassPaperSx }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Stack className={"basket-frame"}>
-          <Box className={"all-check-box"}>
-            {cartItems.length === 0 ? (
-              <div>Cart is empty!</div>
-            ) : (
-              <Stack flexDirection={"row"}>
-                <div>Cart Products: </div>
-                <DeleteForeverIcon onClick={() => onDeleteAll()}
-                  sx={{ ml: "5px", cursor: "pointer" }}
-                />
-              </Stack>
-
-            )}
-
+        {/* ===== Header ===== */}
+        <Box sx={headerSx}>
+          <Box>
+            <Typography
+              sx={{
+                fontWeight: 900,
+                fontSize: 14,
+                color: "#1E3D2B",
+              }}
+            >
+              Basket
+            </Typography>
+            <Typography sx={{ fontSize: 12, color: "#2D5B16" }}>
+              {cartItems.length === 0
+                ? ": Cart is empty!"
+                : `Items: ${cartItems.length}`}
+            </Typography>
           </Box>
 
-          <Box className={"orders-main-wrapper"}>
-            <Box className={"orders-wrapper"}>
-              {cartItems.map((item: CartItem) => {
-                const imagePath = `${serverApi}/${item.image}`
-                return (
-                  <Box className={"basket-info-box"} key={item._id}>
-                    <div className={"cancel-btn"}>
-                      <CancelIcon color={"primary"} onClick={() => onDelete(item)} />
-                    </div>
-                    <img src={imagePath} className={"product-img"} />
-                    <span className={"product-name"}>{item.name}</span>
-                    <p className={"product-price"}>${item.price} x {item.quantity}</p>
-                    <Box sx={{ minWidth: 120 }}>
-                      <div className="col-2">
-                        <button onClick={() => onRemove(item)} className="remove">-</button>{" "}
-                        <button onClick={() => onAdd(item)} className="add">+</button>
-                      </div>
-                    </Box>
+          {cartItems.length !== 0 && (
+            <DeleteForeverIcon
+              onClick={() => onDeleteAll()}
+              sx={{
+                cursor: "pointer",
+                color: "rgba(255,255,255,0.85)",
+                "&:hover": { color: "rgba(125, 255, 191, 0.95)" },
+              }}
+            />
+          )}
+        </Box>
+
+        {/* ===== Items ===== */}
+        <Box sx={{ maxHeight: 360, overflowY: "auto" }}>
+          {cartItems.map((item: CartItem) => {
+            const imagePath = `${serverApi}/${item.image}`;
+            return (
+              <Box key={item._id} sx={itemCardSx}>
+                <Box sx={{ position: "relative", width: 44, height: 44 }}>
+                  <img
+                    src={imagePath}
+                    className={"product-img"}
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      objectFit: "cover",
+                      border: "1px solid rgba(255,255,255,0.20)",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: -10,
+                      left: -10,
+                      background: "rgba(0,0,0,0.25)",
+                      border: "1px solid rgba(255,255,255,0.18)",
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
+                      borderRadius: "10px",
+                      width: 28,
+                      height: 28,
+                      display: "grid",
+                      placeItems: "center",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => onDelete(item)}
+                    title="Remove item"
+                  >
+                    <CancelIcon sx={{ fontSize: 18, color: "rgba(255,255,255,0.9)" }} />
                   </Box>
-                );
-              })}
+                </Box>
 
-            </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: 13,
+                      fontWeight: 800,
+                      color: "rgba(255,255,255,0.92)",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {item.name}
+                  </Typography>
+                  <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.72)" }}>
+                    ${item.price} × {item.quantity}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", gap: 0.8, alignItems: "center" }}>
+                  <button onClick={() => onRemove(item)} style={qtyBtnSx as any}>
+                    −
+                  </button>
+                  <button onClick={() => onAdd(item)} style={qtyBtnSx as any}>
+                    +
+                  </button>
+                </Box>
+              </Box>
+            );
+          })}
+        </Box>
+
+        {/* ===== Footer ===== */}
+        {cartItems.length !== 0 ? (
+          <Box sx={footerSx}>
+            <Typography
+              sx={{
+                fontSize: 12,
+                color: "rgba(255,255,255,0.78)",
+                maxWidth: 220,
+              }}
+            >
+              Total:{" "}
+              <span style={{ fontWeight: 900, color: "rgba(255,255,255,0.92)" }}>
+                ${totalPrice}
+              </span>{" "}
+              <span style={{ opacity: 0.85 }}>
+                ({itemsPrice} + {shippingCost})
+              </span>
+            </Typography>
+
+            <Button
+              onClick={procceedOrdersHandler}
+              startIcon={<ShoppingCartIcon />}
+              variant={"contained"}
+              sx={{
+                borderRadius: "12px",
+                textTransform: "none",
+                fontWeight: 900,
+                px: 2.2,
+                backgroundColor: "#1E3D2B",
+                "&:hover": { backgroundColor: "#285743" },
+                boxShadow: "0 16px 28px rgba(0,0,0,0.25)",
+              }}
+            >
+              Order
+            </Button>
           </Box>
-          {cartItems.length !== 0 ? (
-            <Box className={"basket-order"}>
-              <span className={"price"}>Total: ${totalPrice} ({itemsPrice} + {shippingCost})</span>
-              <Button onClick={procceedOrdersHandler} startIcon={<ShoppingCartIcon />} variant={"contained"}>
-                Order
-              </Button>
-            </Box>
-          ) : ("")}
-        </Stack>
+        ) : (
+          ""
+        )}
       </Menu>
     </Box>
   );

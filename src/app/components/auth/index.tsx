@@ -3,39 +3,77 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import { Fab, Stack, TextField } from "@mui/material";
-import styled from "styled-components";
+import { Box, Fab, Stack, TextField, Typography } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { T } from "../../../lib/data/types/common";
-import theme from "../../material/MaterialTheme";
 import { Messages } from "../../../lib/data/config";
 import { LoginInput, MemberInput } from "../../../lib/data/types/member";
 import MemberService from "../../services/MemberService";
 import { sweetErrorHandling } from "../../../lib/data/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 
-const useStyles = makeStyles((theme) => ({
+/**
+ * UI GOAL:
+ * - blurred glass card (see-through)
+ * - rounded container
+ * - green accent like screenshot
+ * - NO images, NO social icons
+ * - LOGIC unchanged
+ */
+const useStyles = makeStyles(() => ({
   modal: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 2, 2),
+
+  // Glass card (see-through)
+  glassCard: {
+    width: 520,
+    borderRadius: 40,
+    padding: "56px 64px 48px",
+
+    /* more transparent */
+    background: "rgba(255,255,255,0.08)",
+
+    /* softer border */
+    border: "1px solid rgba(255,255,255,0.22)",
+
+    /* stronger blur to compensate */
+    backdropFilter: "blur(22px)",
+    WebkitBackdropFilter: "blur(22px)",
+
+    /* subtle depth */
+    boxShadow: "0 30px 80px rgba(0,0,0,0.35)",
   },
+
 }));
 
-const ModalImg = styled.img`
-  width: 62%;
-  height: 100%;
-  border-radius: 10px;
-  background: #000;
-  margin-top: 9px;
-  margin-left: 10px;
-`;
+/** TextField underline look like screenshot */
+const glassFieldSx = {
+  width: "100%",
+  "& .MuiInputBase-root": {
+    color: "rgba(255,255,255,0.92)",
+    fontSize: 14,
+  },
+  "& .MuiInputLabel-root": {
+    color: "rgba(255,255,255,0.72)",
+    fontSize: 12,
+    letterSpacing: 0.4,
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "rgba(125, 255, 191, 0.95)",
+  },
+  "& .MuiInput-underline:before": {
+    borderBottom: "1px solid rgba(255,255,255,0.55)",
+  },
+  "& .MuiInput-underline:hover:before": {
+    borderBottom: "1px solid rgba(255,255,255,0.75) !important",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottom: "2px solid rgba(125, 255, 191, 0.95)",
+  },
+};
 
 interface AuthenticationModalProps {
   signupOpen: boolean;
@@ -47,82 +85,121 @@ interface AuthenticationModalProps {
 export default function AuthenticationModal(props: AuthenticationModalProps) {
   const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
   const classes = useStyles();
+
   const [memberNick, setMemberNick] = useState<string>("");
   const [memberPhone, setMemberPhone] = useState<string>("");
   const [memberPassword, setMemberPassword] = useState<string>("");
   const { setAuthMember } = useGlobals();
 
-  /** HANDLERS **/
-  const handleUsername =(e: T) => {
-    console.log(e.target.value)
-    setMemberNick(e.target.value)
-  }
+  /** HANDLERS (LOGIC UNTOUCHED) **/
+  const handleUsername = (e: T) => {
+    console.log(e.target.value);
+    setMemberNick(e.target.value);
+  };
 
-  const handlePhone =(e: T) => {
-    setMemberPhone(e.target.value)
-  }
+  const handlePhone = (e: T) => {
+    setMemberPhone(e.target.value);
+  };
 
-  const handlePassword =(e: T) => {
-    setMemberPassword(e.target.value)
-  }
+  const handlePassword = (e: T) => {
+    setMemberPassword(e.target.value);
+  };
 
   const handlePasswordKeyDown = (e: T) => {
-    if(e.key == "Enter" && signupOpen) {
+    if (e.key == "Enter" && signupOpen) {
       handleSignupReqest().then();
-    } else if(e.key === "Enter" && loginOpen) {
+    } else if (e.key === "Enter" && loginOpen) {
       handleLoginReqest().then();
     }
-  }
+  };
 
-  const handleSignupReqest = async()=> {
+  const handleSignupReqest = async () => {
     try {
-      const isFulfill = memberNick !== "" && memberPhone !== "" && memberPassword !== "";
-      if(!isFulfill) throw new Error(Messages.error3)
+      const isFulfill =
+        memberNick !== "" && memberPhone !== "" && memberPassword !== "";
+      if (!isFulfill) throw new Error(Messages.error3);
 
-        const signupInput: MemberInput = {
-          memberNick: memberNick,
-          memberPhone: memberPhone,
-          memberPassword: memberPassword,
-        }
+      const signupInput: MemberInput = {
+        memberNick: memberNick,
+        memberPhone: memberPhone,
+        memberPassword: memberPassword,
+      };
 
-        const member = new MemberService();
-        const result = await member.signup(signupInput);
+      const member = new MemberService();
+      const result = await member.signup(signupInput);
 
-        //Saving Authenticated User
-      setAuthMember(result);  
+      //Saving Authenticated User
+      setAuthMember(result);
       handleSignupClose();
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
       handleSignupClose();
       sweetErrorHandling(err).then();
     }
-  }
+  };
 
-  const handleLoginReqest = async()=> {
+  const handleLoginReqest = async () => {
     try {
       const isFulfill = memberNick !== "" && memberPassword !== "";
-      if(!isFulfill) throw new Error(Messages.error3)
+      if (!isFulfill) throw new Error(Messages.error3);
 
-        const loginInput: LoginInput = {
-          memberNick: memberNick,
-          memberPassword: memberPassword,
-        }
+      const loginInput: LoginInput = {
+        memberNick: memberNick,
+        memberPassword: memberPassword,
+      };
 
-        const member = new MemberService();
-        const result = await member.login(loginInput);
+      const member = new MemberService();
+      const result = await member.login(loginInput);
 
-        //Saving Authenticated User
+      //Saving Authenticated User
       setAuthMember(result);
       handleLoginClose();
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
       handleLoginClose();
       sweetErrorHandling(err).then();
     }
-  }
+  };
+
+  /** Screenshot-like green button */
+  const glassButtonSx = {
+    mt: 2,
+    width: 240,
+    height: 44,
+    borderRadius: 10,
+    textTransform: "none",
+    fontWeight: 800,
+    backgroundColor: "#1E3D2B",
+    color: "rgba(10, 30, 18, 0.92)",
+    boxShadow: "0 16px 28px rgba(0,0,0,0.22)",
+    "&:hover": {
+      backgroundColor: "#285743",
+    },
+  };
+
+  /** Reusable header block like screenshot */
+  const Header = ({ subtitle }: { subtitle: React.ReactNode }) => (
+    <Box sx={{ textAlign: "center" }}>
+      <Typography
+        sx={{
+          fontSize: 42,
+          fontWeight: 900,
+          color: "rgba(255,255,255,0.95)",
+          lineHeight: 1.05,
+        }}
+      >
+        Get Started
+      </Typography>
+
+      <Typography sx={{ mt: 1, fontSize: 12, color: "rgba(255,255,255,0.70)" }}>
+        {subtitle}
+      </Typography>
+    </Box>
+  );
 
   return (
     <div>
+      {/* SIGNUP MODAL */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -133,52 +210,62 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
+          // keep site visible behind (lighter than default)
+          style: { backgroundColor: "rgba(0,0,0,0.25)" },
         }}
       >
         <Fade in={signupOpen}>
-          <Stack
-            className={classes.paper}
-            direction={"row"}
-            sx={{ width: "800px" }}
-          >
-            <ModalImg src={"/img/auth.webp"} alt="camera" />
-            <Stack sx={{ marginLeft: "69px", alignItems: "center" }}>
-              <h2>Signup Form</h2>
+          <Stack className={classes.glassCard} spacing={4} alignItems="center">
+            <Header
+              subtitle={
+                <>
+                  Already have an Account ?{" "}
+                  <span style={{ color: "rgba(125, 255, 191, 0.95)", fontWeight: 800 }}>
+                    Log in
+                  </span>
+                </>
+              }
+            />
+
+            <Stack sx={{ width: "100%" }} spacing={3}>
               <TextField
-                sx={{ marginTop: "7px" }}
-                id="outlined-basic"
-                label="username"
-                variant="outlined"
+                variant="standard"
+                label="Name"
+                value={memberNick}
                 onChange={handleUsername}
+                sx={glassFieldSx}
               />
               <TextField
-                sx={{ my: "17px" }}
-                id="outlined-basic"
-                label="phone number"
-                variant="outlined"
+                variant="standard"
+                label="Phone number"
+                value={memberPhone}
                 onChange={handlePhone}
+                sx={glassFieldSx}
               />
               <TextField
-                id="outlined-basic"
-                label="password"
-                variant="outlined"
+                variant="standard"
+                label="Password"
+                type="password"
+                value={memberPassword}
                 onChange={handlePassword}
                 onKeyDown={handlePasswordKeyDown}
+                sx={glassFieldSx}
               />
-              <Fab
-                sx={{ marginTop: "30px", width: "120px" }}
-                variant="extended"
-                color="primary"
-                onClick={handleSignupReqest}
-              >
-                <LoginIcon sx={{ mr: 1 }} />
-                Signup
-              </Fab>
             </Stack>
+
+            <Fab
+              sx={glassButtonSx}
+              variant="extended"
+              onClick={handleSignupReqest}
+            >
+              <LoginIcon sx={{ mr: 1 }} />
+              Sign Up
+            </Fab>
           </Stack>
         </Fade>
       </Modal>
 
+      {/* LOGIN MODAL */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -189,48 +276,40 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
+          style: { backgroundColor: "rgba(0,0,0,0.25)" },
         }}
       >
         <Fade in={loginOpen}>
-          <Stack
-            className={classes.paper}
-            direction={"row"}
-            sx={{ width: "700px" }}
-          >
-            <ModalImg src={"/img/auth.webp"} alt="camera" />
-            <Stack
-              sx={{
-                marginLeft: "65px",
-                marginTop: "25px",
-                alignItems: "center",
-              }}
-            >
-              <h2>Login Form</h2>
+          <Stack className={classes.glassCard} spacing={4} alignItems="center">
+            <Header subtitle={<></>} />
+
+            <Stack sx={{ width: "100%" }} spacing={3}>
               <TextField
-                id="outlined-basic"
-                label="username"
-                variant="outlined"
-                sx={{ my: "10px" }}
+                variant="standard"
+                label="Name"
+                value={memberNick}
                 onChange={handleUsername}
+                sx={glassFieldSx}
               />
               <TextField
-                id={"outlined-basic"}
-                label={"password"}
-                variant={"outlined"}
-                type={"password"}
+                variant="standard"
+                label="Password"
+                type="password"
+                value={memberPassword}
                 onChange={handlePassword}
                 onKeyDown={handlePasswordKeyDown}
+                sx={glassFieldSx}
               />
-              <Fab
-                sx={{ marginTop: "27px", width: "120px" }}
-                variant={"extended"}
-                color={"primary"}
-                onClick={handleLoginReqest}
-              >
-                <LoginIcon sx={{ mr: 1 }} />
-                Login
-              </Fab>
             </Stack>
+
+            <Fab
+              sx={glassButtonSx}
+              variant="extended"
+              onClick={handleLoginReqest}
+            >
+              <LoginIcon sx={{ mr: 1 }} />
+              Log in
+            </Fab>
           </Stack>
         </Fade>
       </Modal>
