@@ -6,11 +6,19 @@
   background-size: cover;
   background-position: center;
   display: flex;
+
+  position: relative;
+  /* NEW: needed for z-index stacking */
 }
 
 .home-navbar .navbar-container {
   margin-top: 24px;
   height: 642px;
+
+  position: relative;
+  /* NEW */
+  z-index: 5;
+  /* NEW */
 }
 
 /* ===== TOP MENU ===== */
@@ -20,6 +28,11 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  position: relative;
+  /* NEW */
+  z-index: 1000;
+  /* NEW */
 }
 
 .home-navbar .brand-link {
@@ -41,6 +54,11 @@
   justify-content: flex-end;
   gap: 24px;
   align-items: center;
+
+  position: relative;
+  /* NEW */
+  z-index: 1100;
+  /* NEW */
 }
 
 .home-navbar a {
@@ -52,26 +70,32 @@
   font-weight: 600;
 }
 
+/* underline for active link */
 .home-navbar .underline {
   border-bottom: 2px solid #2e7d32;
   padding-bottom: 4px;
 }
 
 /* hover underline animation */
+.home-navbar .hover-line {
+  position: relative;
+  /* NEW: makes ::after positioning stable */
+}
+
 .home-navbar .hover-line:after {
   display: block;
   content: "";
   border-bottom: solid 2px #2e7d32;
   transform: scaleX(0);
   transition: transform 250ms ease-in-out;
+  transform-origin: 0% 50%;
+
+  pointer-events: none;
+  /* ✅ KEY FIX: don't block clicks */
 }
 
 .home-navbar .hover-line:hover:after {
   transform: scaleX(1);
-}
-
-.home-navbar div.hover-line:after {
-  transform-origin: 0% 50%;
 }
 
 /* auth buttons */
@@ -100,11 +124,23 @@
   cursor: pointer;
 }
 
-/* ===== HERO BOX (center box like screenshot) ===== */
+/* ===== HERO BOX ===== */
 .home-navbar .header-frame {
   margin-top: 110px;
   height: 520px;
+
   position: relative;
+  z-index: 1;
+  /* NEW: keep hero below navbar */
+}
+
+/* ✅ Safety: hero background never blocks navbar clicks */
+.home-navbar .header-frame {
+  pointer-events: none;
+}
+
+.home-navbar .hero-btn {
+  pointer-events: auto;
 }
 
 .home-navbar .hero-box {
@@ -117,6 +153,9 @@
   color: #fff;
   background: rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(1px);
+
+  pointer-events: auto;
+  /* allow interactions inside box if needed */
 }
 
 .home-navbar .hero-tag {
@@ -159,27 +198,27 @@
   }
 }
 
-
-
-
-/******OTHER NAVBAR *******/
-
-/* ===========================
-   OtherNavbar CSS (matches HomeNavbar style)
-   =========================== */
+/****** OTHER NAVBAR *******/
 
 .other-navbar {
   width: 100%;
   height: 660px;
-  /* less than Home (773px), but still tall enough */
   background-size: cover;
   background-position: center;
   display: flex;
+
+  position: relative;
+  /* NEW */
 }
 
 .other-navbar .navbar-container {
   margin-top: 24px;
   height: 560px;
+
+  position: relative;
+  /* NEW */
+  z-index: 5;
+  /* NEW */
 }
 
 /* ===== TOP MENU ===== */
@@ -189,6 +228,11 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  position: relative;
+  /* NEW */
+  z-index: 1000;
+  /* NEW */
 }
 
 .other-navbar .brand-link {
@@ -211,6 +255,11 @@
   gap: 24px;
   align-items: center;
   margin-right: 100px;
+
+  position: relative;
+  /* NEW */
+  z-index: 1100;
+  /* NEW */
 }
 
 .other-navbar a {
@@ -228,20 +277,25 @@
 }
 
 /* hover underline animation */
+.other-navbar .hover-line {
+  position: relative;
+  /* NEW */
+}
+
 .other-navbar .hover-line:after {
   display: block;
   content: "";
   border-bottom: solid 2px #2e7d32;
   transform: scaleX(0);
   transition: transform 250ms ease-in-out;
+  transform-origin: 0% 50%;
+
+  pointer-events: none;
+  /* ✅ KEY FIX */
 }
 
 .other-navbar .hover-line:hover:after {
   transform: scaleX(1);
-}
-
-.other-navbar div.hover-line:after {
-  transform-origin: 0% 50%;
 }
 
 .other-navbar .auth-buttons .login-button {
@@ -252,9 +306,6 @@
   border-radius: 8px !important;
 }
 
-
-
-
 /* avatar */
 .other-navbar .user-avatar {
   width: 42px;
@@ -264,12 +315,22 @@
   cursor: pointer;
 }
 
-/* ===== HERO BOX (same square look, slightly less top space) ===== */
+/* ===== HERO BOX ===== */
 .other-navbar .header-frame {
   margin-top: 90px;
-  /* slightly less than Home's 110px */
   height: 360px;
   position: relative;
+  z-index: 1;
+  /* NEW */
+}
+
+/* ✅ Safety: hero never blocks navbar clicks */
+.other-navbar .header-frame {
+  pointer-events: none;
+}
+
+.other-navbar .hero-btn {
+  pointer-events: auto;
 }
 
 .other-navbar .hero-box {
@@ -277,12 +338,13 @@
   max-width: calc(100% - 40px);
   margin: 0 auto;
   padding: 62px 60px;
-  /* slightly smaller than Home */
   border: 3px solid rgba(255, 255, 255, 0.85);
   text-align: center;
   color: #fff;
   background: rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(1px);
+
+  pointer-events: auto;
 }
 
 .other-navbar .hero-tag {
@@ -293,7 +355,6 @@
 
 .other-navbar .hero-title {
   font-size: 50px;
-  /* slightly smaller than Home's 54px */
   font-weight: 900;
   letter-spacing: 1px;
 }

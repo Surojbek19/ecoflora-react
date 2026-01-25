@@ -10,96 +10,107 @@ import { Messages, serverApi } from "../../../lib/data/config";
 import MemberService from "../../services/MemberService";
 
 export function Settings() {
-  const {authMember, setAuthMember} = useGlobals();
+  const { authMember, setAuthMember } = useGlobals();
+
   const [memberImage, setMemberImage] = useState<string>(
-    authMember?.memberImage ? `${serverApi}/${authMember.memberImage}`
-    : "/icons/default-user.svg"
-  )
+    authMember?.memberImage ? `${serverApi}/${authMember.memberImage}` : "/icons/default-user.svg"
+  );
 
   const [memberUpdateInput, setMemberUpdateInput] = useState<MemberUpdateInput>({
     memberNick: authMember?.memberNick,
     memberPhone: authMember?.memberPhone,
     memberAddress: authMember?.memberAddress,
     memberDesc: authMember?.memberDesc,
-    memberImage: authMember?.memberImage
-  })
+    memberImage: authMember?.memberImage,
+  });
 
   /** HANDLERS **/
   const memberNickHandler = (e: T) => {
     memberUpdateInput.memberNick = e.target.value;
-    setMemberUpdateInput({...memberUpdateInput})
+    setMemberUpdateInput({ ...memberUpdateInput });
   };
 
   const memberPhoneHandler = (e: T) => {
     memberUpdateInput.memberPhone = e.target.value;
-    setMemberUpdateInput({...memberUpdateInput})
+    setMemberUpdateInput({ ...memberUpdateInput });
   };
 
   const memberAddressHandler = (e: T) => {
     memberUpdateInput.memberAddress = e.target.value;
-    setMemberUpdateInput({...memberUpdateInput})
+    setMemberUpdateInput({ ...memberUpdateInput });
   };
 
   const memberDescriptionHandler = (e: T) => {
     memberUpdateInput.memberDesc = e.target.value;
-    setMemberUpdateInput({...memberUpdateInput})
+    setMemberUpdateInput({ ...memberUpdateInput });
   };
 
   const handleSubmitButton = async () => {
-    try{
-      if(!authMember) throw new Error (Messages.error2);
-      if(
+    try {
+      if (!authMember) throw new Error(Messages.error2);
+
+      if (
         memberUpdateInput.memberNick === "" ||
         memberUpdateInput.memberPhone === "" ||
         memberUpdateInput.memberAddress === "" ||
-        memberUpdateInput.memberDesc === "" 
+        memberUpdateInput.memberDesc === ""
       ) {
-        throw new Error (Messages.error3)
+        throw new Error(Messages.error3);
       }
 
       const member = new MemberService();
       const result = await member.updateMember(memberUpdateInput);
       setAuthMember(result);
 
-      await sweetTopSmallSuccessAlert("Modified successfully!", 700)
-    } catch(err) {
-      console.log(err)
-      sweetErrorHandling(err).then()
+      await sweetTopSmallSuccessAlert("Modified successfully!", 700);
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err).then();
     }
-  }
+  };
 
   /** HANDLER **/
   const handleImageView = (e: T) => {
     const file = e.target.files[0];
-    console.log("file:", file)
+    console.log("file:", file);
+
     const fileType = file.type;
     const validateImageType = ["image/jpg", "image/jpeg", "image/png"];
-    if(!validateImageType.includes(fileType)){
+
+    if (!validateImageType.includes(fileType)) {
       sweetErrorHandling(Messages.error5).then();
     } else {
-      if(file) {
+      if (file) {
         memberUpdateInput.memberImage = file;
-        setMemberUpdateInput({...memberUpdateInput});
-        setMemberImage(URL.createObjectURL(file))
+        setMemberUpdateInput({ ...memberUpdateInput });
+        setMemberImage(URL.createObjectURL(file));
       }
     }
-  } 
+  };
 
   return (
     <Box className={"settings"}>
+      {/* Top media row */}
       <Box className={"member-media-frame"}>
-        <img src={memberImage} className={"mb-image"} />
+        <Box className="mb-image-wrap">
+          <img src={memberImage} className={"mb-image"} alt="member" />
+        </Box>
+
         <div className={"media-change-box"}>
-          <span>Upload image</span>
-          <p>JPG, JPEG, PNG formats only!</p>
+          <span className="upload-title">Profile photo</span>
+          <p className="upload-hint">JPG, JPEG, PNG formats only</p>
+
           <div className={"up-del-box"}>
-            <Button component="label" onChange={handleImageView}>
+            <Button className="upload-btn" component="label" onChange={handleImageView}>
               <CloudDownloadIcon />
+              <span className="upload-btn-text">Upload</span>
               <input type="file" hidden />
             </Button>
           </div>
         </div>
       </Box>
+
+      {/* Inputs */}
       <Box className={"input-frame"}>
         <div className={"long-input"}>
           <label className={"spec-label"}>Username</label>
@@ -113,6 +124,7 @@ export function Settings() {
           />
         </div>
       </Box>
+
       <Box className={"input-frame"}>
         <div className={"short-input"}>
           <label className={"spec-label"}>Phone</label>
@@ -125,6 +137,7 @@ export function Settings() {
             onChange={memberPhoneHandler}
           />
         </div>
+
         <div className={"short-input"}>
           <label className={"spec-label"}>Address</label>
           <input
@@ -137,6 +150,7 @@ export function Settings() {
           />
         </div>
       </Box>
+
       <Box className={"input-frame"}>
         <div className={"long-input"}>
           <label className={"spec-label"}>Description</label>
@@ -149,8 +163,12 @@ export function Settings() {
           />
         </div>
       </Box>
+
+      {/* Save */}
       <Box className={"save-box"}>
-        <Button variant={"contained"} onClick={handleSubmitButton}>Save</Button>
+        <Button className="save-btn" variant={"contained"} onClick={handleSubmitButton}>
+          Save
+        </Button>
       </Box>
     </Box>
   );

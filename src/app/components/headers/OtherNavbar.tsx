@@ -38,7 +38,13 @@ export default function OtherNavbar(props: OtherNavbarProps) {
         handleLogoutRequest,
     } = props;
 
-    const { authMember } = useGlobals();
+    // const { authMember } = useGlobals();
+    const authMember = {
+        _id: "temp-id",
+        name: "Michael",
+        phoneNumber: "87498479847",
+        memberImage: null,
+    }
 
     return (
         <div
@@ -68,6 +74,22 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                                 Products
                             </NavLink>
                         </Box>
+
+                        {authMember ? (
+                            <Box className="hover-line">
+                                <NavLink to="/orders" activeClassName="underline">
+                                    Orders
+                                </NavLink>
+                            </Box>
+                        ) : null}
+
+                        {authMember ? (
+                            <Box className="hover-line">
+                                <NavLink to="/member-page" activeClassName="underline">
+                                    My Page
+                                </NavLink>
+                            </Box>
+                        ) : null}
 
                         <Box className="hover-line">
                             <NavLink to="/help" activeClassName="underline">
