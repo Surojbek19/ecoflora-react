@@ -188,7 +188,7 @@ export default function Basket(props: BasketProps) {
               onClick={() => onDeleteAll()}
               sx={{
                 cursor: "pointer",
-                color: "rgba(255,255,255,0.85)",
+                color: "#1E3D2B",
                 "&:hover": { color: "rgba(125, 255, 191, 0.95)" },
               }}
             />
@@ -232,7 +232,7 @@ export default function Basket(props: BasketProps) {
                     onClick={() => onDelete(item)}
                     title="Remove item"
                   >
-                    <CancelIcon sx={{ fontSize: 18, color: "rgba(255,255,255,0.9)" }} />
+                    <CancelIcon sx={{ fontSize: 18, color: "#1E3D2B" }} />
                   </Box>
                 </Box>
 
@@ -241,25 +241,47 @@ export default function Basket(props: BasketProps) {
                     sx={{
                       fontSize: 13,
                       fontWeight: 800,
-                      color: "rgba(255,255,255,0.92)",
+                      color: "#1E3D2B",
                       lineHeight: 1.2,
                     }}
                   >
                     {item.name}
                   </Typography>
-                  <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.72)" }}>
+                  <Typography sx={{ fontSize: 12, color: "#1E3D2B" }}>
                     ${item.price} × {item.quantity}
                   </Typography>
                 </Box>
 
                 <Box sx={{ display: "flex", gap: 0.8, alignItems: "center" }}>
-                  <button onClick={() => onRemove(item)} style={qtyBtnSx as any}>
+                  <button
+                    onClick={() => onRemove(item)}
+                    style={{
+                      ...qtyBtnSx,
+                      color: "#c62828",                 // red
+                      background: "rgba(198,40,40,0.15)",
+                      border: "1px solid rgba(198,40,40,0.35)",
+                    } as any}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.08)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                  >
                     −
                   </button>
-                  <button onClick={() => onAdd(item)} style={qtyBtnSx as any}>
+
+                  <button
+                    onClick={() => onAdd(item)}
+                    style={{
+                      ...qtyBtnSx,
+                      color: "#2e7d32",                 // green
+                      background: "rgba(46,125,50,0.18)",
+                      border: "1px solid rgba(46,125,50,0.35)",
+                    } as any}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.08)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                  >
                     +
                   </button>
                 </Box>
+
               </Box>
             );
           })}
@@ -271,12 +293,12 @@ export default function Basket(props: BasketProps) {
             <Typography
               sx={{
                 fontSize: 12,
-                color: "rgba(255,255,255,0.78)",
+                color: "#1E3D2B",
                 maxWidth: 220,
               }}
             >
               Total:{" "}
-              <span style={{ fontWeight: 900, color: "rgba(255,255,255,0.92)" }}>
+              <span style={{ fontWeight: 900, color: "#1E3D2B" }}>
                 ${totalPrice}
               </span>{" "}
               <span style={{ opacity: 0.85 }}>
