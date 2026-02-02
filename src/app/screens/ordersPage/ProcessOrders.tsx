@@ -20,12 +20,12 @@ export default function ProcessOrders() {
                                                 <Box className="item-left">
                                                     <img
                                                         src={"/img/lavash.webp"}
-                                                        className="order-dish-img"
-                                                        alt="dish"
+                                                        className="order-product-img"
+                                                        alt="product"
                                                     />
                                                     <Box className="item-text">
-                                                        <Box className="dish-name">Lavash</Box>
-                                                        <Box className="dish-note">Preparing with care</Box>
+                                                        <Box className="product-name">Lavash</Box>
+                                                        <Box className="product-note">Preparing with care</Box>
                                                     </Box>
                                                 </Box>
 

@@ -119,7 +119,7 @@
     min-width: 0;
 }
 
-.order-dish-img {
+.order-product-img {
     width: 54px;
     height: 54px;
     border-radius: 50%;
@@ -134,12 +134,12 @@
     min-width: 0;
 }
 
-.dish-name {
+.product-name {
     font-weight: 900;
     color: #111;
 }
 
-.dish-note {
+.product-note {
     font-size: 12px;
     font-weight: 700;
     color: #6b7a72;

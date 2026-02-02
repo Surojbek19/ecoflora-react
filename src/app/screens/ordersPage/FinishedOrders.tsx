@@ -19,11 +19,11 @@ export default function FinishedOrders() {
                                                     <img
                                                         src={"/img/lavash.webp"}
                                                         className="order-dish-img"
-                                                        alt="dish"
+                                                        alt="product"
                                                     />
                                                     <Box className="item-text">
-                                                        <Box className="dish-name">Lavash</Box>
-                                                        <Box className="dish-note">Delivered successfully</Box>
+                                                        <Box className="product-name">Lavash</Box>
+                                                        <Box className="product-note">Delivered successfully</Box>
                                                     </Box>
                                                 </Box>
 

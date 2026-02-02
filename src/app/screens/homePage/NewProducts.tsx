@@ -3,12 +3,12 @@ import { Box, Container } from "@mui/material";
 
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { retrieveNewDishes } from "./selector";
+import { retrieveNewProducts } from "./selector";
 import { Product } from "../../../lib/data/types/product";
 
 const newProductsRetriever = createSelector(
-  retrieveNewDishes,
-  (newDishes) => ({ newDishes })
+  retrieveNewProducts,
+  (NewProducts) => ({ NewProducts })
 );
 
 /** Temporary hardcoded cards (until backend ready) */
@@ -20,11 +20,11 @@ const FALLBACK_PRODUCTS: Product[] = [
 ];
 
 export default function NewProducts() {
-  const { newDishes } = useSelector(newProductsRetriever);
+  const { NewProducts } = useSelector(newProductsRetriever);
 
   const productsToShow: Product[] =
-    newDishes && newDishes.length > 0
-      ? newDishes.slice(0, 4)
+    NewProducts && NewProducts.length > 0
+      ? NewProducts.slice(0, 4)
       : FALLBACK_PRODUCTS;
 
   return (
