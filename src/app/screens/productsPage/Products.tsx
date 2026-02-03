@@ -6,6 +6,23 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 import { CartItem } from "../../../lib/data/types/search";
 
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setProducts } from "./slice";
+import { createSelector } from "reselect";
+import { retrieveProducts } from "./selector";
+import { Product } from "../../../lib/data/types/product";
+
+/** REDUX SLICE & SELECTOR **/
+const actionDispatch = (dispatch: Dispatch) => ({
+    setProducts: (data: Product[]) => dispatch(setProducts(data))
+})
+
+const productsRetriever = createSelector(
+    retrieveProducts,
+    (products) => ({ products })
+);
+
 interface ProductsProps {
     onAdd: (item: CartItem) => void;
 }

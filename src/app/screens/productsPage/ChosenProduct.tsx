@@ -10,9 +10,30 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper";
-
 import { CartItem } from "../../../lib/data/types/search";
 
+
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setChosenProduct, setStore } from "./slice";
+import { createSelector } from "reselect";
+import { retrieveChosenProduct, retrieveStore } from "./selector";
+import { Product } from "../../../lib/data/types/product";
+
+/** REDUX SLICE & SELECTOR **/
+const actionDispatch = (dispatch: Dispatch) => ({
+  setStore: (data: Product[]) => dispatch(setStore(data)),
+  setChosenProduct: (data: Product[]) => dispatch(setChosenProduct(data))
+})
+
+const chosenProductsRetriever = createSelector(
+  retrieveChosenProduct,
+  (chosenProduct) => ({ chosenProduct })
+);
+const storeRetriever = createSelector(
+  retrieveStore,
+  (store) => ({ store })
+);
 
 interface ChosenProductProps {
   onAdd: (item: CartItem) => void;
@@ -40,7 +61,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
     ],
   };
 
-  const restaurant = {
+  const store = {
     memberNick: "EcoFlora",
   };
 
@@ -134,7 +155,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
                 <span className="stock-pill">In Stock</span>
               </Box>
 
-              <span className={"resto-name"}>{restaurant.memberNick}</span>
+              <span className={"resto-name"}>{store.memberNick}</span>
 
               {/* ✅ views only */}
               <Box className={"rating-box"}>
