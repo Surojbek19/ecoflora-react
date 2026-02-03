@@ -8,7 +8,7 @@ import { Product } from "../../../lib/data/types/product";
 
 const newProductsRetriever = createSelector(
   retrieveNewProducts,
-  (NewProducts) => ({ NewProducts })
+  (newProducts) => ({ newProducts })
 );
 
 /** Temporary hardcoded cards (until backend ready) */
@@ -20,11 +20,11 @@ const FALLBACK_PRODUCTS: Product[] = [
 ];
 
 export default function NewProducts() {
-  const { NewProducts } = useSelector(newProductsRetriever);
+  const { newProducts } = useSelector(newProductsRetriever);
 
   const productsToShow: Product[] =
     NewProducts && NewProducts.length > 0
-      ? NewProducts.slice(0, 4)
+      ? newProducts.slice(0, 4)
       : FALLBACK_PRODUCTS;
 
   return (

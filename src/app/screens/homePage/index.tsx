@@ -7,7 +7,7 @@ import Events from "./Events";
 import ActiveUsers from "./ActiveUsers";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
-import { setNewProducts, setP, setTopUsers } from "./slice";
+import { setNewProducts, setPopularProducts, setTopUsers } from "./slice";
 import { Product } from "../../../lib/data/types/product";
 import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/data/enums/product.enum";
@@ -17,7 +17,7 @@ import "../../../css/home.css"
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({
-  setP: (data: Product[]) => dispatch(setP(data)),
+  setPopularProducts: (data: Product[]) => dispatch(setPopularProducts(data)),
   setNewProducts: (data: Product[]) => dispatch(setNewProducts(data)),
   setTopUsers: (data: Member[]) => dispatch(setTopUsers(data)),
 });
@@ -26,7 +26,7 @@ const actionDispatch = (dispatch: Dispatch) => ({
 
 
 export default function HomePage() {
-  const { setP, setNewProducts, setTopUsers } = actionDispatch(useDispatch());
+  const { setPopularProducts, setNewProducts, setTopUsers } = actionDispatch(useDispatch());
 
   console.log(process.env.REACT_APP_API_URL)
 
@@ -40,7 +40,7 @@ export default function HomePage() {
       productCollection: ProductCollection.INDOOR,
     })
       .then(
-        data => setP(data))
+        data => setPopularProducts(data))
       .catch((err) => console.log("Error:", err))
 
     product.getProducts({

@@ -112,8 +112,8 @@
 }
 
 .popular-product-img {
-  width: 82%;
-  height: 82%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   transition: transform 0.35s ease;
 }
@@ -149,19 +149,12 @@
   color: #2d5b16;
 }
 
-.popular-product-name {
-  margin-top: 8px;
-  font-size: 26px;
-  font-weight: 700;
-  color: #1f1f1f;
-  line-height: 1.2;
-}
-
-.popular-product-price {
-  margin-top: 10px;
-  font-size: 22px;
-  font-weight: 700;
-  color: #1f1f1f;
+.product-text {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2933;
+  line-height: 1.4;
 }
 
 /* Responsive */
