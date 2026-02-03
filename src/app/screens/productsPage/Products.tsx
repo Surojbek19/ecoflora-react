@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box, Container, Stack } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -11,7 +11,10 @@ import { Dispatch } from "@reduxjs/toolkit";
 import { setProducts } from "./slice";
 import { createSelector } from "reselect";
 import { retrieveProducts } from "./selector";
-import { Product } from "../../../lib/data/types/product";
+import { Product, ProductInquiry } from "../../../lib/data/types/product";
+import { ProductCollection } from "../../../lib/data/enums/product.enum";
+import { useHistory } from "react-router-dom";
+import ProductService from "../../services/ProductService";
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -26,7 +29,7 @@ const productsRetriever = createSelector(
 interface ProductsProps {
     onAdd: (item: CartItem) => void;
 }
-
+/////////////////////////////////////////////////////////////////////////////////////
 type Category = "Indoor" | "Outdoor" | "Flower" | "Pots" | "Others";
 
 type ProductUI = {
@@ -41,20 +44,77 @@ const HARD_PRODUCTS: ProductUI[] = [
     { _id: "p1", productName: "Plant", productPrice: 12.5, productViews: 1240, category: "Indoor" },
     { _id: "p2", productName: "Plant", productPrice: 20.0, productViews: 980, category: "Indoor" },
     { _id: "p3", productName: "Plant", productPrice: 12.0, productViews: 1450, category: "Indoor" },
+    //
+    { _id: "p4", productName: "Plant", productPrice: 18.0, productViews: 880, category: "Outdoor" },         //
+    { _id: "p5", productName: "Plant", productPrice: 9.99, productViews: 620, category: "Outdoor" },         //
+    { _id: "p6", productName: "Plant", productPrice: 14.0, productViews: 1100, category: "Outdoor" },        //
+    //
+    { _id: "p7", productName: "Plant", productPrice: 22.0, productViews: 500, category: "Flower" },          //
+    { _id: "p8", productName: "Plant", productPrice: 16.5, productViews: 760, category: "Pots" },            // 
+    { _id: "p9", productName: "Plant", productPrice: 11.0, productViews: 1320, category: "Others" },         //
+];                                                                                                           //
+//
+const CATEGORIES: Category[] = ["Indoor", "Outdoor", "Flower", "Pots", "Others"];                            //
 
-    { _id: "p4", productName: "Plant", productPrice: 18.0, productViews: 880, category: "Outdoor" },
-    { _id: "p5", productName: "Plant", productPrice: 9.99, productViews: 620, category: "Outdoor" },
-    { _id: "p6", productName: "Plant", productPrice: 14.0, productViews: 1100, category: "Outdoor" },
-
-    { _id: "p7", productName: "Plant", productPrice: 22.0, productViews: 500, category: "Flower" },
-    { _id: "p8", productName: "Plant", productPrice: 16.5, productViews: 760, category: "Pots" },
-    { _id: "p9", productName: "Plant", productPrice: 11.0, productViews: 1320, category: "Others" },
-];
-
-const CATEGORIES: Category[] = ["Indoor", "Outdoor", "Flower", "Pots", "Others"];
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export default function Products(props: ProductsProps) {
     const { onAdd } = props;
+    const { setProducts } = actionDispatch(useDispatch());
+    const { products } = useSelector(productsRetriever);
+    const [productSearch, setProductSearch] = useState<ProductInquiry>({
+        page: 1,
+        limit: 9,
+        order: "createdAt",
+        productCollection: ProductCollection.INDOOR,
+        search: "",
+    });
+
+    const [searchText, setSearchText] = useState<string>("");
+
+    const history = useHistory();
+
+    useEffect(() => {
+        const product = new ProductService();
+        product.getProducts(productSearch)
+            .then((data) => setProducts(data))
+            .catch((err) => console.log(err));
+    }, [productSearch]);
+
+    useEffect(() => {
+        if (searchText === "") {
+            productSearch.search = "";
+            setProductSearch({ ...productSearch });
+        }
+    }, [searchText]);
+
+    /** HAMDLERS **/
+    const searchCollectionHandler = (collection: ProductCollection) => {
+        productSearch.page = 1;
+        productSearch.productCollection = collection;
+        setProductSearch({ ...productSearch });
+    }
+
+    const searchOrderHandler = (order: string) => {
+        productSearch.page = 1;
+        productSearch.order = order;
+        setProductSearch({ ...productSearch });
+    }
+
+    const searchProductHandler = () => {
+        productSearch.search = searchText;
+        setProductSearch({ ...productSearch });
+    }
+
+    const paginationHandler = (e: ChangeEvent<any>, value: number) => {
+        productSearch.page = value;
+        setProductSearch({ ...productSearch });
+    }
+
+    const chooseDishHnadler = (id: string) => {
+        console.log("productId:", id)
+        history.push(`/products/${id}`)
+    }
 
     return (
         <div className="products-page">
