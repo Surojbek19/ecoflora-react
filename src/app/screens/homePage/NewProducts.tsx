@@ -1,63 +1,69 @@
 import React from "react";
 import { Box, Container } from "@mui/material";
-
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { retrieveNewProducts } from "./selector";
 import { Product } from "../../../lib/data/types/product";
+import { serverApi } from "../../../lib/data/config";
 
 const newProductsRetriever = createSelector(
   retrieveNewProducts,
   (newProducts) => ({ newProducts })
 );
 
-/** Temporary hardcoded cards (until backend ready) */
-const FALLBACK_PRODUCTS: Product[] = [
-  { _id: "f1", productPrice: 12.5 } as Product,
-  { _id: "f2", productPrice: 20.0 } as Product,
-  { _id: "f3", productPrice: 12.0 } as Product,
-  { _id: "f4", productPrice: 18.0 } as Product,
-];
-
 export default function NewProducts() {
   const { newProducts } = useSelector(newProductsRetriever);
 
-  const productsToShow: Product[] =
-    NewProducts && NewProducts.length > 0
-      ? newProducts.slice(0, 4)
-      : FALLBACK_PRODUCTS;
+  console.log("newProducts:", newProducts);
 
   return (
     <Box className="new-products-frame-ui">
       <Container>
         <Box className="new-products-header">
           <Box className="new-products-title">New Products</Box>
-          <Box className="new-products-subtitle">Fresh arrivals this week</Box>
+          <Box className="new-products-subtitle">
+            Fresh arrivals this week
+          </Box>
         </Box>
 
-        {productsToShow.length > 0 ? (
+        {newProducts.length > 0 ? (
           <Box className="new-products-grid">
-            {productsToShow.map((product: Product) => (
-              <Box key={product._id} className="new-product-card">
-                <Box className="new-product-imgWrap">
-                  <Box className="new-pill">NEW</Box>
+            {newProducts.map((product: Product) => {
+              const imagePath =
+                product.productImages?.length > 0
+                  ? `${serverApi}/${product.productImages[0]}`
+                  : "/img/default-product.JPG";
 
-                  <img
-                    className="new-product-img"
-                    src="/img/monsteria.jpg"
-                    alt="monsteria"
-                  />
+              return (
+                <Box key={product._id} className="new-product-card">
+                  <Box className="new-product-imgWrap">
+                    <Box className="new-pill">NEW</Box>
+
+                    <img
+                      className="new-product-img"
+                      src={imagePath}
+                      alt={product.productName ?? "product"}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src =
+                          "/img/default-product.JPG";
+                      }}
+                    />
+                  </Box>
+
+                  <Box className="new-product-type">
+                    {product.productCollection}
+                  </Box>
+
+                  <Box className="new-product-name product-text">
+                    {product.productName}
+                  </Box>
+
+                  <Box className="new-product-price product-text">
+                    Price: ${product.productPrice}
+                  </Box>
                 </Box>
-
-                <Box className="new-product-type">Indoor Plant</Box>
-
-                <Box className="new-product-name">Monsteria</Box>
-
-                <Box className="new-product-price">
-                  ${Number(product.productPrice ?? 0).toFixed(2)}
-                </Box>
-              </Box>
-            ))}
+              );
+            })}
           </Box>
         ) : (
           <Box className="new-products-empty">

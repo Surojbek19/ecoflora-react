@@ -47,7 +47,7 @@ export default function HomePage() {
       page: 1,
       limit: 4,
       order: "createdAt",
-      // productCollection: ProductCollection.INDOOR,
+      // productCollection: ProductCollection.OUTDOOR,
     })
       .then(
         data => setNewProducts(data))

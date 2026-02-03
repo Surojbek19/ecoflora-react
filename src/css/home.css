@@ -255,21 +255,6 @@
   font-size: 15px;
 }
 
-.new-product-name {
-  margin-top: 8px;
-  font-size: 26px;
-  font-weight: 700;
-  color: #1f1f1f;
-  line-height: 1.2;
-}
-
-.new-product-price {
-  margin-top: 10px;
-  font-size: 22px;
-  font-weight: 700;
-  color: #1f1f1f;
-}
-
 .new-products-empty {
   margin-top: 20px;
   color: #777;

@@ -15,7 +15,7 @@ const popularProductsRetriever = createSelector(
 export default function PopularProducts() {
     const { popularProducts } = useSelector(popularProductsRetriever);
 
-    console.log("popularProducts:", popularProducts);
+
 
     return (
         <Box className="popular-products-frame">
@@ -29,19 +29,19 @@ export default function PopularProducts() {
 
                 <Box className="popular-products-grid">
                     {popularProducts.length !== 0 ? (
-                        popularProducts.map((ele: Product) => {
+                        popularProducts.map((product: Product) => {
                             const imagePath =
-                                ele.productImages?.length > 0
-                                    ? `${serverApi}/${ele.productImages[0]}`
+                                product.productImages?.length > 0
+                                    ? `${serverApi}/${product.productImages[0]}`
                                     : "/img/default-product.JPG";
 
                             return (
-                                <Box key={ele._id} className="popular-product-card">
+                                <Box key={product._id} className="popular-product-card">
                                     <Box className="popular-product-imgWrap">
                                         <img
                                             className="popular-product-img"
                                             src={imagePath}
-                                            alt={ele.productName ?? "product"}
+                                            alt={product.productName ?? "product"}
                                             onError={(e) => {
                                                 (e.currentTarget as HTMLImageElement).src =
                                                     "/img/default-product.JPG";
@@ -51,20 +51,20 @@ export default function PopularProducts() {
 
                                     <Box className="popular-product-meta">
                                         <span className="popular-product-type">
-                                            {ele.productCollection ?? "Indoor Plant"}
+                                            {product.productCollection ?? "Indoor Plant"}
                                         </span>
 
                                         <span className="popular-product-views">
                                             <VisibilityOutlinedIcon className="popular-product-eye" />
-                                            {ele.productViews}
+                                            {product.productViews}
                                         </span>
                                     </Box>
 
-                                    <Box className="popular-product-name">
-                                        {ele.productName ?? "Plant"}
+                                    <Box className="popular-product-name product-text">
+                                        {product.productName ?? "Plant"}
                                     </Box>
-                                    <Box className="popular-product-price">
-                                        Price: ${ele.productPrice}
+                                    <Box className="popular-product-price product-text">
+                                        Price: ${product.productPrice}
                                     </Box>
                                 </Box>
                             );
