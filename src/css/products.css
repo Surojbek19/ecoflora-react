@@ -78,26 +78,36 @@
 .products-categories {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     margin-top: 6px;
+    align-items: flex-start;
 }
 
-.cat-btn {
-    width: 100%;
-    text-align: left;
-    border-radius: 999px;
-    padding: 12px 16px;
-    border: 1px solid rgba(0, 0, 0, 0.18);
-    background: transparent;
-    font-weight: 800;
-    cursor: pointer;
-    color: #1a1a1a;
+/* Base button shape */
+.cat-mui-btn {
+    width: 220px !important;
+    height: 44px !important;
+    border-radius: 999px !important;
+    text-transform: none !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    justify-content: flex-start !important;
+    padding-left: 18px !important;
+
+    box-shadow: none !important;
+    /* like screenshot */
 }
 
-.cat-btn.active {
-    background: #1f4d1a;
-    border-color: #1f4d1a;
-    color: #fff;
+/* optional: force colors if your theme doesn't match */
+.cat-mui-btn.MuiButton-containedPrimary {
+    background: #1f4d1a !important;
+    color: #fff !important;
+}
+
+.cat-mui-btn.MuiButton-containedSecondary {
+    background: transparent !important;
+    border: 1px solid rgba(0, 0, 0, 0.18) !important;
+    color: #1a1a1a !important;
 }
 
 /* Grid: force 3 columns */
@@ -124,13 +134,10 @@
     width: 100%;
     height: 260px;
     object-fit: cover;
-    /* 🔥 THIS is the key */
     object-position: center;
-    /* keep plant centered */
     display: block;
     transition: transform 0.35s ease;
 }
-
 
 .plant-card:hover .plant-image {
     transform: scale(1.08);
@@ -187,7 +194,6 @@
     color: #1f4d1a;
 }
 
-
 .product-text {
     margin-top: 6px;
     font-size: 18px;
@@ -196,55 +202,38 @@
     line-height: 1.4;
 }
 
-/* Pagination mock */
-.pagination-mock {
+
+/*  NO DATA TEXT  */
+.products-right {
+    min-height: 520px;
+    display: flex;
+}
+
+.products-empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 32px;
+    font-weight: 700;
+    color: #1f4d1a;
+    text-align: center;
+}
+
+
+
+
+
+
+/* New MUI pagination – centered */
+.pagination-section {
     margin-top: 40px;
     display: flex;
     justify-content: center;
+    /* ✅ horizontal center */
     align-items: center;
-    gap: 14px;
-}
-
-.page-pill {
-    width: 34px;
-    height: 34px;
-    border-radius: 999px;
-    background: rgba(31, 77, 26, 0.6);
-    display: grid;
-    place-items: center;
-    color: #fff;
-    font-weight: 800;
-}
-
-.page-arrow {
-    border: none;
-    background: transparent;
-    font-size: 22px;
-    cursor: pointer;
-    opacity: 0.6;
-}
-
-.page-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 999px;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    background: transparent;
-    font-weight: 800;
-    cursor: pointer;
-    transition: 0.2s ease;
-    background: #2D5C15;
-}
-
-.page-btn:hover {
-    border-color: #1f4d1a;
-    background: rgba(31, 77, 26, 0.08);
-}
-
-.page-btn.active {
-    background: #1f4d1a;
-    border-color: #1f4d1a;
-    color: #fff;
+    /* ✅ vertical center */
 }
 
 
@@ -273,6 +262,7 @@
         width: 160px;
     }
 }
+
 
 
 /*******   MAP  *******/
