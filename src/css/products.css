@@ -112,24 +112,25 @@
     cursor: default;
 }
 
-/* Image frame like your screenshot */
 .plant-image-frame {
     position: relative;
     overflow: hidden;
     border: 2px solid rgba(170, 160, 155, 0.7);
     border-radius: 26px;
-    padding: 18px;
     background: #ffffff;
 }
 
 .plant-image {
     width: 100%;
-    height: 230px;
-    /* smaller, closer to screenshot balance */
-    object-fit: contain;
+    height: 260px;
+    object-fit: cover;
+    /* 🔥 THIS is the key */
+    object-position: center;
+    /* keep plant centered */
     display: block;
     transition: transform 0.35s ease;
 }
+
 
 .plant-card:hover .plant-image {
     transform: scale(1.08);
@@ -186,22 +187,13 @@
     color: #1f4d1a;
 }
 
-/* FIX: name + price smaller */
-.plant-name {
-    margin-top: 6px;
-    font-size: 24px;
-    /* was too big */
-    font-weight: 800;
-    line-height: 1.05;
-    color: #111;
-}
 
-.plant-price {
-    margin-top: 10px;
-    font-size: 20px;
-    /* was too big */
-    font-weight: 900;
-    color: #111;
+.product-text {
+    margin-top: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2933;
+    line-height: 1.4;
 }
 
 /* Pagination mock */
