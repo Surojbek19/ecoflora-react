@@ -45,7 +45,7 @@ export default function Products(props: ProductsProps) {
         page: 1,
         limit: 6,
         order: "createdAt",
-        productCollection: ProductCollection.OUTDOOR,
+        productCollection: ProductCollection.INDOOR,
         search: "",
     });
 
@@ -53,7 +53,7 @@ export default function Products(props: ProductsProps) {
     const history = useHistory();
 
     const [activeCategory, setActiveCategory] =
-        useState<ProductCollection>(ProductCollection.OUTDOOR);
+        useState<ProductCollection>(ProductCollection.INDOOR);
 
     useEffect(() => {
         const product = new ProductService();

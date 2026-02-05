@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ProductsPageState } from "../../../lib/data/types/screen";
-import { Store } from "@mui/icons-material";
 
 const initialState: ProductsPageState = {
     store: null,

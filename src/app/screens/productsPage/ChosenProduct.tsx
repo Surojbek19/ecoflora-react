@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Container, Stack, Button, Modal, IconButton } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -10,8 +10,8 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper";
-import { CartItem } from "../../../lib/data/types/search";
 
+import { CartItem } from "../../../lib/data/types/search";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
@@ -19,21 +19,23 @@ import { setChosenProduct, setStore } from "./slice";
 import { createSelector } from "reselect";
 import { retrieveChosenProduct, retrieveStore } from "./selector";
 import { Product } from "../../../lib/data/types/product";
+import { useParams } from "react-router-dom";
+import ProductService from "../../services/ProductService";
+import MemberService from "../../services/MemberService";
+import { Member } from "../../../lib/data/types/member";
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({
-  setStore: (data: Product[]) => dispatch(setStore(data)),
-  setChosenProduct: (data: Product[]) => dispatch(setChosenProduct(data))
-})
+  setStore: (data: Member) => dispatch(setStore(data)),
+  setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
+});
 
 const chosenProductsRetriever = createSelector(
   retrieveChosenProduct,
   (chosenProduct) => ({ chosenProduct })
 );
-const storeRetriever = createSelector(
-  retrieveStore,
-  (store) => ({ store })
-);
+
+const storeRetriever = createSelector(retrieveStore, (store) => ({ store }));
 
 interface ChosenProductProps {
   onAdd: (item: CartItem) => void;
@@ -44,27 +46,14 @@ const truncate = (text: string, max: number) =>
 
 export default function ChosenProduct(props: ChosenProductProps) {
   const { onAdd } = props;
+  const { productId } = useParams<{ productId: string }>();
 
-  // ✅ HARD-CODE DATA (backend later)
-  const product = {
-    _id: "temp-id",
-    productName: "Monstera deliciosa",
-    productViews: 245,
-    productPrice: 12,
-    productDesc:
-      "Monstera deliciosa is an iconic indoor plant known for its split leaves. It grows well in bright, indirect light and makes any room feel calm and fresh. Water when the top soil feels dry, and rotate the pot occasionally to encourage even growth.",
-    productImages: [
-      "/img/product-1.jpg",
-      "/img/product-2.jpg",
-      "/img/product-3.jpg",
-      "/img/product-4.jpg",
-    ],
-  };
+  const { setStore, setChosenProduct } = actionDispatch(useDispatch());
 
-  const store = {
-    memberNick: "EcoFlora",
-  };
+  const { chosenProduct } = useSelector(chosenProductsRetriever);
+  const { store } = useSelector(storeRetriever);
 
+  // ✅ thumbs
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
   // ✅ quantity
@@ -74,7 +63,32 @@ export default function ChosenProduct(props: ChosenProductProps) {
 
   // ✅ zoom
   const [zoomOpen, setZoomOpen] = useState(false);
-  const [zoomSrc, setZoomSrc] = useState(product.productImages[0]);
+  const [zoomSrc, setZoomSrc] = useState<string>("");
+
+  // ✅ server api (adjust if your project uses a different variable)
+  const serverApi =
+    (process.env.REACT_APP_API_URL as string) ||
+    (process.env.REACT_APP_SERVER_API as string) ||
+    "";
+
+  useEffect(() => {
+
+    const productService = new ProductService();
+    productService
+      .getProduct(productId)
+      .then((data) => {
+        setChosenProduct(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // set initial zoom image when chosenProduct arrives
+  useEffect(() => {
+    if (chosenProduct?.productImages?.length) {
+      const first = chosenProduct.productImages[0];
+      setZoomSrc(serverApi ? `${serverApi}/${first}` : first);
+    }
+  }, [chosenProduct, serverApi]);
 
   const openZoom = (src: string) => {
     setZoomSrc(src);
@@ -83,18 +97,33 @@ export default function ChosenProduct(props: ChosenProductProps) {
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!chosenProduct) return;
+
+    const firstImg =
+      chosenProduct.productImages?.length > 0
+        ? serverApi
+          ? `${serverApi}/${chosenProduct.productImages[0]}`
+          : chosenProduct.productImages[0]
+        : "";
+
     onAdd({
-      _id: product._id,
+      _id: chosenProduct._id,
       quantity: qty,
-      name: product.productName,
-      price: product.productPrice,
-      image: product.productImages[0],
+      name: chosenProduct.productName,
+      price: chosenProduct.productPrice,
+      image: firstImg,
     });
   };
 
   const scrollToDescription = () => {
-    document.getElementById("product-description")?.scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById("product-description")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
+
+  if (!chosenProduct) return null;
+
+  const storeNick = store?.memberNick ?? "EcoFlora";
 
   return (
     <div className={"chosen-product"}>
@@ -109,20 +138,29 @@ export default function ChosenProduct(props: ChosenProductProps) {
               loop={true}
               spaceBetween={10}
               navigation={true}
-              thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+              thumbs={{
+                swiper:
+                  thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
+              }}
               modules={[FreeMode, Navigation, Thumbs]}
               className="swiper-area"
             >
-              {product.productImages.map((ele: string, index: number) => (
-                <SwiperSlide key={index}>
-                  <img
-                    className="slider-image"
-                    src={ele}
-                    alt={`product-${index}`}
-                    onClick={() => openZoom(ele)}
-                  />
-                </SwiperSlide>
-              ))}
+              {(chosenProduct.productImages ?? []).map(
+                (ele: string, index: number) => {
+                  const imagePath = serverApi ? `${serverApi}/${ele}` : ele;
+
+                  return (
+                    <SwiperSlide key={index}>
+                      <img
+                        className="slider-image"
+                        src={imagePath}
+                        alt={`product-${index}`}
+                        onClick={() => openZoom(imagePath)}
+                      />
+                    </SwiperSlide>
+                  );
+                }
+              )}
             </Swiper>
 
             {/* THUMBS */}
@@ -136,11 +174,22 @@ export default function ChosenProduct(props: ChosenProductProps) {
                 modules={[FreeMode, Thumbs]}
                 className="thumbs-swiper"
               >
-                {product.productImages.map((ele: string, index: number) => (
-                  <SwiperSlide key={index}>
-                    <img className="thumb-image" src={ele} alt={`thumb-${index}`} />
-                  </SwiperSlide>
-                ))}
+                {(chosenProduct.productImages ?? []).map(
+                  (ele: string, index: number) => {
+                    const imagePath = serverApi ? `${serverApi}/${ele}` : ele;
+
+                    return (
+                      <SwiperSlide key={index}>
+                        <img
+                          className="thumb-image"
+                          src={imagePath}
+                          alt={`thumb-${index}`}
+                          onClick={() => openZoom(imagePath)}
+                        />
+                      </SwiperSlide>
+                    );
+                  }
+                )}
               </Swiper>
             </Box>
           </Stack>
@@ -148,28 +197,35 @@ export default function ChosenProduct(props: ChosenProductProps) {
           {/* RIGHT: info */}
           <Stack className={"chosen-product-info"}>
             <Box className={"info-box"}>
-              <Box className="category">Indoor Plant</Box>
+              <Box className="category">{chosenProduct.productCollection}</Box>
 
               <Box className="name-row">
-                <strong className={"product-name"}>{product.productName}</strong>
+                <strong className={"product-name"}>
+                  {chosenProduct.productName}
+                </strong>
                 <span className="stock-pill">In Stock</span>
               </Box>
 
-              <span className={"resto-name"}>{store.memberNick}</span>
+              <span className={"resto-name"}>{storeNick}</span>
+              <span className={"resto-name"}>0102345678</span>
 
               {/* ✅ views only */}
               <Box className={"rating-box"}>
                 <div className={"evaluation-box"}>
                   <div className={"product-view"}>
                     <RemoveRedEyeIcon sx={{ mr: "8px" }} />
-                    <span>{product.productViews} Views</span>
+                    <span>{chosenProduct.productViews} Views</span>
                   </div>
                 </div>
               </Box>
 
-              {/* ✅ short preview (same desc, truncated) */}
-              <p className={"product-desc preview"} onClick={scrollToDescription}>
-                {truncate(product.productDesc, 110)} <span className="read-more">Read more</span>
+              {/* ✅ short preview */}
+              <p
+                className={"product-desc preview"}
+                onClick={scrollToDescription}
+              >
+                {truncate(chosenProduct.productDesc ?? "No Description", 80)}{" "}
+                <span className="read-more">Read more</span>
               </p>
 
               <Divider height="1" width="100%" bg="#e6e6e6" />
@@ -177,7 +233,9 @@ export default function ChosenProduct(props: ChosenProductProps) {
               {/* ✅ ONE PRICE ONLY */}
               <div className={"product-price"}>
                 <span className="price-label">Price</span>
-                <span className="price-value">${product.productPrice.toFixed(2)}</span>
+                <span className="price-value">
+                  ${Number(chosenProduct.productPrice).toFixed(2)}
+                </span>
               </div>
 
               {/* ✅ Qty + Add to Cart */}
@@ -192,7 +250,11 @@ export default function ChosenProduct(props: ChosenProductProps) {
                   </button>
                 </div>
 
-                <Button className="add-btn" variant="contained" onClick={handleAddToCart}>
+                <Button
+                  className="add-btn"
+                  variant="contained"
+                  onClick={handleAddToCart}
+                >
                   Add To Cart
                 </Button>
               </div>
@@ -203,7 +265,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
         {/* ===== BOTTOM: Description only ===== */}
         <Box id="product-description" className="desc-section">
           <Box className="desc-title">Description</Box>
-          <Box className="desc-text">{product.productDesc}</Box>
+          <Box className="desc-text">{chosenProduct.productDesc}</Box>
         </Box>
       </Container>
 
