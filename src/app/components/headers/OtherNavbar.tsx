@@ -38,13 +38,13 @@ export default function OtherNavbar(props: OtherNavbarProps) {
         handleLogoutRequest,
     } = props;
 
-    // const { authMember } = useGlobals();
-    const authMember = {
-        _id: "temp-id",
-        name: "Michael",
-        phoneNumber: "87498479847",
-        memberImage: null,
-    }
+    const { authMember } = useGlobals();
+    // const authMember = {
+    //     _id: "temp-id",
+    //     name: "Michael",
+    //     phoneNumber: "87498479847",
+    //     memberImage: null,
+    // }
 
     return (
         <div

@@ -189,7 +189,7 @@ export default function Basket(props: BasketProps) {
               sx={{
                 cursor: "pointer",
                 color: "#1E3D2B",
-                "&:hover": { color: "rgba(125, 255, 191, 0.95)" },
+                // "&:hover": { color: "rgba(125, 255, 191, 0.95)" },
               }}
             />
           )}
@@ -198,7 +198,14 @@ export default function Basket(props: BasketProps) {
         {/* ===== Items ===== */}
         <Box sx={{ maxHeight: 360, overflowY: "auto" }}>
           {cartItems.map((item: CartItem) => {
-            const imagePath = `${serverApi}/${item.image}`;
+            const base = serverApi.replace(/\/+$/, "");
+
+            const imagePath = item.image
+              ? (item.image.startsWith("http://") || item.image.startsWith("https://"))
+                ? item.image
+                : `${base}/${item.image.replace(/^\/+/, "")}`
+              : "/img/default-product.JPG";
+
             return (
               <Box key={item._id} sx={itemCardSx}>
                 <Box sx={{ position: "relative", width: 44, height: 44 }}>

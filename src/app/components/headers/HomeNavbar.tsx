@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Container, Stack } from "@mui/material";
+import {
+    Box,
+    Button,
+    Container,
+    Stack,
+    ListItemIcon,
+    Menu,
+    MenuItem,
+} from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
 import { CartItem } from "../../../lib/data/types/search";
 import "../../../css/navbar.css";
+import { useGlobals } from "../../hooks/useGlobals";
+import { Logout } from "@mui/icons-material";
+import { serverApi } from "../../../lib/data/config";
 
 interface HomeNavbarProps {
     cartItems: CartItem[];
@@ -15,6 +26,8 @@ interface HomeNavbarProps {
     // keep these if App.tsx passes them
     setSignupOpen?: (isOpen: boolean) => void;
     setLoginOpen?: (isOpen: boolean) => void;
+
+    // logout menu handlers (same behavior as OtherNavbar)
     handleLogoutClick?: (e: React.MouseEvent<HTMLElement>) => void;
     anchorEl?: HTMLElement | null;
     handleCloseLogout?: () => void;
@@ -30,10 +43,15 @@ export default function HomeNavbar(props: HomeNavbarProps) {
         onDeleteAll,
         setSignupOpen,
         setLoginOpen,
+
+        // logout props (may be undefined if not passed)
+        handleLogoutClick,
+        anchorEl,
+        handleCloseLogout,
+        handleLogoutRequest,
     } = props;
 
-    // ✅ KEEP YOUR OLD LOGIC EXACTLY
-    const authMember = true;
+    const { authMember } = useGlobals();
 
     const [count, setCount] = useState<number>(0);
     const [value, setvalue] = useState<boolean>(true);
@@ -44,6 +62,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
         return () => {
             console.log("componentWillUnmount");
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
     const buttonHandler = () => {
@@ -51,6 +70,27 @@ export default function HomeNavbar(props: HomeNavbarProps) {
         // If you want to open modal instead of toggling value, use:
         // setSignupOpen?.(true);
     };
+
+    // ---- helpers to avoid "Cannot GET /http://..." or double base urls
+    const buildAvatarSrc = (img?: string | null) => {
+        if (!img) return "/icons/default-user.svg";
+        if (img.startsWith("http://") || img.startsWith("https://")) return img;
+        const base = serverApi.replace(/\/+$/, "");
+        const clean = img.replace(/^\/+/, "");
+        return `${base}/${clean}`;
+    };
+
+    // safe no-op fallbacks if props not provided
+    const onAvatarClick =
+        handleLogoutClick ??
+        ((e: React.MouseEvent<HTMLElement>) => {
+            // If you want, open member page by default when no menu handler is provided
+            // history.push("/member-page");
+            // For now do nothing.
+        });
+
+    const onCloseMenu = handleCloseLogout ?? (() => { });
+    const onLogout = handleLogoutRequest ?? (() => { });
 
     return (
         <div
@@ -102,7 +142,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                             </NavLink>
                         </Box>
 
-                        {/* ✅ FIX 2: Basket needs props */}
+                        {/* Basket */}
                         <Basket
                             cartItems={cartItems}
                             onAdd={onAdd}
@@ -125,9 +165,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                                     variant="contained"
                                     className="signup-button"
                                     onClick={() => {
-                                        // keep your old handler logic
                                         buttonHandler();
-                                        // also open modal if you have it
                                         setSignupOpen?.(true);
                                     }}
                                 >
@@ -135,11 +173,33 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                                 </Button>
                             </Stack>
                         ) : (
-                            <img
-                                className="user-avatar"
-                                src={"/icons/default-user.svg"}
-                                alt="User"
-                            />
+                            <>
+                                {/* ✅ avatar works like OtherNavbar */}
+                                <img
+                                    className="user-avatar"
+                                    src={buildAvatarSrc(authMember?.memberImage)}
+                                    onClick={onAvatarClick}
+                                    alt="User"
+                                />
+
+                                {/* ✅ logout menu works like OtherNavbar */}
+                                <Menu
+                                    anchorEl={anchorEl ?? null}
+                                    id="account-menu"
+                                    open={Boolean(anchorEl)}
+                                    onClose={onCloseMenu}
+                                    onClick={onCloseMenu}
+                                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                                >
+                                    <MenuItem onClick={onLogout}>
+                                        <ListItemIcon>
+                                            <Logout fontSize="small" />
+                                        </ListItemIcon>
+                                        Logout
+                                    </MenuItem>
+                                </Menu>
+                            </>
                         )}
                     </Stack>
                 </Stack>
@@ -149,7 +209,8 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                         <Box className="hero-tag">Plant trends 2026</Box>
                         <Box className="hero-title">BRING NATURE HOME</Box>
                         <Box className="hero-sub">
-                            Indoor & outdoor plants for calm, balanced living — {count} hours service
+                            Indoor & outdoor plants for calm, balanced living — {count} hours
+                            service
                         </Box>
 
                         <Button
