@@ -53,23 +53,23 @@ export default function HomeNavbar(props: HomeNavbarProps) {
 
     const { authMember } = useGlobals();
 
-    const [count, setCount] = useState<number>(0);
-    const [value, setvalue] = useState<boolean>(true);
+    // const [count, setCount] = useState<number>(0);
+    // const [value, setvalue] = useState<boolean>(true);
 
-    useEffect(() => {
-        console.log("componentDidMount", count);
-        setCount(count + 1);
-        return () => {
-            console.log("componentWillUnmount");
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
+    // useEffect(() => {
+    //     console.log("componentDidMount", count);
+    //     setCount(count + 1);
+    //     return () => {
+    //         console.log("componentWillUnmount");
+    //     };
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [value]);
 
-    const buttonHandler = () => {
-        setvalue(!value);
-        // If you want to open modal instead of toggling value, use:
-        // setSignupOpen?.(true);
-    };
+    // const buttonHandler = () => {
+    //     setvalue(!value);
+    //     // If you want to open modal instead of toggling value, use:
+    //     // setSignupOpen?.(true);
+    // };
 
     // ---- helpers to avoid "Cannot GET /http://..." or double base urls
     const buildAvatarSrc = (img?: string | null) => {
@@ -165,7 +165,6 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                                     variant="contained"
                                     className="signup-button"
                                     onClick={() => {
-                                        buttonHandler();
                                         setSignupOpen?.(true);
                                     }}
                                 >
@@ -209,8 +208,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                         <Box className="hero-tag">Plant trends 2026</Box>
                         <Box className="hero-title">BRING NATURE HOME</Box>
                         <Box className="hero-sub">
-                            Indoor & outdoor plants for calm, balanced living — {count} hours
-                            service
+                            Indoor & outdoor plants for calm, balanced living
                         </Box>
 
                         <Button

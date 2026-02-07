@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -18,7 +18,7 @@ import { useGlobals } from "../../hooks/useGlobals";
  * - rounded container
  * - green accent like screenshot
  * - NO images, NO social icons
- * - LOGIC unchanged
+ * - LOGIC unchanged (only add reset on close)
  */
 const useStyles = makeStyles(() => ({
   modal: {
@@ -46,7 +46,6 @@ const useStyles = makeStyles(() => ({
     /* subtle depth */
     boxShadow: "0 30px 80px rgba(0,0,0,0.35)",
   },
-
 }));
 
 /** TextField underline look like screenshot */
@@ -91,9 +90,32 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
   const [memberPassword, setMemberPassword] = useState<string>("");
   const { setAuthMember } = useGlobals();
 
+  /** RESET FORM (so reopen doesn't show old inputs) */
+  const resetAuthForm = () => {
+    setMemberNick("");
+    setMemberPhone("");
+    setMemberPassword("");
+  };
+
+  /** Close handlers that also reset */
+  const closeSignup = () => {
+    resetAuthForm();
+    handleSignupClose();
+  };
+
+  const closeLogin = () => {
+    resetAuthForm();
+    handleLoginClose();
+  };
+
+  // Optional: if both modals are closed, reset (covers outside-click, ESC, etc.)
+  useEffect(() => {
+    if (!signupOpen && !loginOpen) resetAuthForm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signupOpen, loginOpen]);
+
   /** HANDLERS (LOGIC UNTOUCHED) **/
   const handleUsername = (e: T) => {
-    console.log(e.target.value);
     setMemberNick(e.target.value);
   };
 
@@ -106,7 +128,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
   };
 
   const handlePasswordKeyDown = (e: T) => {
-    if (e.key == "Enter" && signupOpen) {
+    if (e.key === "Enter" && signupOpen) {
       handleSignupReqest().then();
     } else if (e.key === "Enter" && loginOpen) {
       handleLoginReqest().then();
@@ -128,12 +150,23 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
       const member = new MemberService();
       const result = await member.signup(signupInput);
 
-      //Saving Authenticated User
+      // Saving Authenticated User
       setAuthMember(result);
+
+      // ✅ clear form so next open is clean
+      resetAuthForm();
+
+      // close modal
       handleSignupClose();
     } catch (err) {
       console.log(err);
+
+      // close modal (your original behavior)
       handleSignupClose();
+
+      // ✅ clear form so next open is clean even on error
+      resetAuthForm();
+
       sweetErrorHandling(err).then();
     }
   };
@@ -151,12 +184,23 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
       const member = new MemberService();
       const result = await member.login(loginInput);
 
-      //Saving Authenticated User
+      // Saving Authenticated User
       setAuthMember(result);
+
+      // ✅ clear form so next open is clean
+      resetAuthForm();
+
+      // close modal
       handleLoginClose();
     } catch (err) {
       console.log(err);
+
+      // close modal (your original behavior)
       handleLoginClose();
+
+      // ✅ clear form so next open is clean even on error
+      resetAuthForm();
+
       sweetErrorHandling(err).then();
     }
   };
@@ -205,12 +249,11 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={signupOpen}
-        onClose={handleSignupClose}
+        onClose={closeSignup}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
-          // keep site visible behind (lighter than default)
           style: { backgroundColor: "rgba(0,0,0,0.25)" },
         }}
       >
@@ -220,7 +263,12 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
               subtitle={
                 <>
                   Already have an Account ?{" "}
-                  <span style={{ color: "rgba(125, 255, 191, 0.95)", fontWeight: 800 }}>
+                  <span
+                    style={{
+                      color: "rgba(125, 255, 191, 0.95)",
+                      fontWeight: 800,
+                    }}
+                  >
                     Log in
                   </span>
                 </>
@@ -253,11 +301,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
               />
             </Stack>
 
-            <Fab
-              sx={glassButtonSx}
-              variant="extended"
-              onClick={handleSignupReqest}
-            >
+            <Fab sx={glassButtonSx} variant="extended" onClick={handleSignupReqest}>
               <LoginIcon sx={{ mr: 1 }} />
               Sign Up
             </Fab>
@@ -271,7 +315,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={loginOpen}
-        onClose={handleLoginClose}
+        onClose={closeLogin}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -302,11 +346,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
               />
             </Stack>
 
-            <Fab
-              sx={glassButtonSx}
-              variant="extended"
-              onClick={handleLoginReqest}
-            >
+            <Fab sx={glassButtonSx} variant="extended" onClick={handleLoginReqest}>
               <LoginIcon sx={{ mr: 1 }} />
               Log in
             </Fab>

@@ -159,7 +159,7 @@
 }
 
 .home-navbar .hero-tag {
-  font-size: 18px;
+  font-size: 20px;
   opacity: 0.95;
   margin-bottom: 10px;
 }
@@ -172,7 +172,7 @@
 
 .home-navbar .hero-sub {
   margin-top: 14px;
-  font-size: 14px;
+  font-size: 18px;
   opacity: 0.9;
 }
 
@@ -348,7 +348,7 @@
 }
 
 .other-navbar .hero-tag {
-  font-size: 18px;
+  font-size: 20px;
   opacity: 0.95;
   margin-bottom: 10px;
 }
@@ -361,7 +361,7 @@
 
 .other-navbar .hero-sub {
   margin-top: 14px;
-  font-size: 14px;
+  font-size: 18px;
   opacity: 0.9;
 }
 
