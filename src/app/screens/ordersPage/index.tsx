@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent } from "react";
+import { useState, SyntheticEvent, useEffect } from "react";
 import { Box, Container, Stack } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -9,13 +9,64 @@ import ProcessOrders from "./ProcessOrders";
 import FinishedOrders from "./FinishedOrders";
 import Divider from "../../components/divider";
 import "../../../css/order.css";
+import { Order, OrderInquiry } from "../../../lib/data/types/order";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useGlobals } from "../../hooks/useGlobals";
+import { OrderStatus } from "../../../lib/data/enums/order.enum";
+import OrderService from "../../services/OrderService";
+import { serverApi } from "../../../lib/data/config";
+
+/** REDUX SLICE & SELECTOR **/
+const actionDispatch = (dispatch: Dispatch) => ({
+  setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
+  setProcessOrders: (data: Order[]) => dispatch(setProcessOrders(data)),
+  setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data)),
+});
+
 
 export default function OrdersPage() {
+  const history = useHistory();
+  const { setPausedOrders, setProcessOrders, setFinishedOrders } = actionDispatch(useDispatch());
+  const { orderBuilder, authMember } = useGlobals();
   const [value, setValue] = useState("1");
+
+
+
+  const [ordeInquiry, setOrderInquiry] = useState<OrderInquiry>({
+    page: 1,
+    limit: 5,
+    orderStatus: OrderStatus.PAUSE,
+  })
+
+  useEffect(() => {
+    const order = new OrderService();
+    order
+      .getMyOrder({ ...ordeInquiry, orderStatus: OrderStatus.PAUSE })
+      .then((data) => setPausedOrders(data))
+      .catch((err) => console.log(err));
+
+    order
+      .getMyOrder({ ...ordeInquiry, orderStatus: OrderStatus.PROCESS })
+      .then((data) => setProcessOrders(data))
+      .catch((err) => console.log(err));
+
+    order
+      .getMyOrder({ ...ordeInquiry, orderStatus: OrderStatus.FINISH })
+      .then((data) => setFinishedOrders(data))
+      .catch((err) => console.log(err));
+  }, [ordeInquiry, orderBuilder]);
+
+  /** HANDLERS **/
+
 
   const handleChange = (e: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  if (!authMember) history.push("/");
 
   return (
     <div className={"orders-page"}>
@@ -43,8 +94,8 @@ export default function OrdersPage() {
               <Divider height="1" width="100%" bg="#e6e6e6" />
 
               <Stack className="order-main-content">
-                <PausedOrders />
-                <ProcessOrders />
+                <PausedOrders setValue={setValue} />
+                <ProcessOrders setValue={setValue} />
                 <FinishedOrders />
               </Stack>
             </TabContext>
@@ -56,17 +107,20 @@ export default function OrdersPage() {
           <Box className="order-right-card">
             <Stack className="user-info-box">
               <Box className={"user-pic"}>
-                <img src="img/justin.webp" alt="user" />
+                <img src={authMember?.memberImage ? `${serverApi}/${authMember.memberImage}`
+                  : "/icons/default-user.svg"
+                }
+                />
               </Box>
 
-              <Box className={"user-name"}>Justin</Box>
-              <Box className={"user-status"}>USER</Box>
+              <Box className={"user-name"}> {authMember?.memberNick}</Box>
+              <Box className={"user-status"}>{authMember?.memberType}</Box>
 
               <Divider height="1" width="100%" bg="#e6e6e6" />
 
               <Box className={"user-location"}>
                 <LocationOnIcon />
-                <Box className={"location"}>South Korea, Busan</Box>
+                <Box className={"location"}> {authMember?.memberAddress ? authMember.memberAddress : "Do not exist"}</Box>
               </Box>
             </Stack>
 

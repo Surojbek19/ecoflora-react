@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef } from "react";
 import {
     Box,
     Button,
@@ -7,6 +7,7 @@ import {
     ListItemIcon,
     Menu,
     MenuItem,
+    IconButton,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
@@ -23,11 +24,9 @@ interface HomeNavbarProps {
     onDelete: (item: CartItem) => void;
     onDeleteAll: () => void;
 
-    // keep these if App.tsx passes them
     setSignupOpen?: (isOpen: boolean) => void;
     setLoginOpen?: (isOpen: boolean) => void;
 
-    // logout menu handlers (same behavior as OtherNavbar)
     handleLogoutClick?: (e: React.MouseEvent<HTMLElement>) => void;
     anchorEl?: HTMLElement | null;
     handleCloseLogout?: () => void;
@@ -44,7 +43,6 @@ export default function HomeNavbar(props: HomeNavbarProps) {
         setSignupOpen,
         setLoginOpen,
 
-        // logout props (may be undefined if not passed)
         handleLogoutClick,
         anchorEl,
         handleCloseLogout,
@@ -53,25 +51,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
 
     const { authMember } = useGlobals();
 
-    // const [count, setCount] = useState<number>(0);
-    // const [value, setvalue] = useState<boolean>(true);
-
-    // useEffect(() => {
-    //     console.log("componentDidMount", count);
-    //     setCount(count + 1);
-    //     return () => {
-    //         console.log("componentWillUnmount");
-    //     };
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [value]);
-
-    // const buttonHandler = () => {
-    //     setvalue(!value);
-    //     // If you want to open modal instead of toggling value, use:
-    //     // setSignupOpen?.(true);
-    // };
-
-    // ---- helpers to avoid "Cannot GET /http://..." or double base urls
+    // ---- helpers
     const buildAvatarSrc = (img?: string | null) => {
         if (!img) return "/icons/default-user.svg";
         if (img.startsWith("http://") || img.startsWith("https://")) return img;
@@ -84,13 +64,22 @@ export default function HomeNavbar(props: HomeNavbarProps) {
     const onAvatarClick =
         handleLogoutClick ??
         ((e: React.MouseEvent<HTMLElement>) => {
-            // If you want, open member page by default when no menu handler is provided
-            // history.push("/member-page");
-            // For now do nothing.
+            // no-op
         });
 
     const onCloseMenu = handleCloseLogout ?? (() => { });
     const onLogout = handleLogoutRequest ?? (() => { });
+
+    // ✅ focus ref for the avatar opener
+    const avatarBtnRef = useRef<HTMLButtonElement | null>(null);
+
+    // ✅ close wrapper that restores focus
+    const closeMenuAndRestoreFocus = () => {
+        onCloseMenu();
+        avatarBtnRef.current?.focus();
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <div
@@ -142,7 +131,6 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                             </NavLink>
                         </Box>
 
-                        {/* Basket */}
                         <Basket
                             cartItems={cartItems}
                             onAdd={onAdd}
@@ -164,34 +152,44 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                                 <Button
                                     variant="contained"
                                     className="signup-button"
-                                    onClick={() => {
-                                        setSignupOpen?.(true);
-                                    }}
+                                    onClick={() => setSignupOpen?.(true)}
                                 >
                                     Sign up
                                 </Button>
                             </Stack>
                         ) : (
                             <>
-                                {/* ✅ avatar works like OtherNavbar */}
-                                <img
-                                    className="user-avatar"
-                                    src={buildAvatarSrc(authMember?.memberImage)}
+                                {/* ✅ Make avatar a real focusable opener */}
+                                <IconButton
+                                    ref={avatarBtnRef}
                                     onClick={onAvatarClick}
-                                    alt="User"
-                                />
+                                    aria-controls={open ? "account-menu" : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? "true" : undefined}
+                                    sx={{ p: 0 }}
+                                >
+                                    <img
+                                        className="user-avatar"
+                                        src={buildAvatarSrc(authMember?.memberImage)}
+                                        alt="User"
+                                    />
+                                </IconButton>
 
-                                {/* ✅ logout menu works like OtherNavbar */}
                                 <Menu
                                     anchorEl={anchorEl ?? null}
                                     id="account-menu"
-                                    open={Boolean(anchorEl)}
-                                    onClose={onCloseMenu}
-                                    onClick={onCloseMenu}
+                                    open={open}
+                                    onClose={closeMenuAndRestoreFocus}
+                                    onClick={closeMenuAndRestoreFocus}
                                     transformOrigin={{ horizontal: "right", vertical: "top" }}
                                     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                                 >
-                                    <MenuItem onClick={onLogout}>
+                                    <MenuItem
+                                        onClick={() => {
+                                            onLogout();
+                                            closeMenuAndRestoreFocus();
+                                        }}
+                                    >
                                         <ListItemIcon>
                                             <Logout fontSize="small" />
                                         </ListItemIcon>

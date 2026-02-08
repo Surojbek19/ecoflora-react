@@ -1,5 +1,14 @@
-import React from "react";
-import { Box, Button, Container, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
+import React, { useRef } from "react";
+import {
+    Box,
+    Button,
+    Container,
+    ListItemIcon,
+    Menu,
+    MenuItem,
+    Stack,
+    IconButton,
+} from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
 import { Logout } from "@mui/icons-material";
@@ -7,16 +16,15 @@ import { CartItem } from "../../../lib/data/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
 import { serverApi } from "../../../lib/data/config";
 
-// IMPORTANT: import OtherNavbar css (separate from navbar.css)
-
 interface OtherNavbarProps {
     cartItems: CartItem[];
     onAdd: (item: CartItem) => void;
     onRemove: (item: CartItem) => void;
     onDelete: (item: CartItem) => void;
     onDeleteAll: () => void;
-    setSignupOpen: (isOpen: boolean) => void; // KEEP (logic/props compatibility)
+    setSignupOpen: (isOpen: boolean) => void; // KEEP
     setLoginOpen: (isOpen: boolean) => void;
+
     handleLogoutClick: (e: React.MouseEvent<HTMLElement>) => void;
     anchorEl: HTMLElement | null;
     handleCloseLogout: () => void;
@@ -39,12 +47,17 @@ export default function OtherNavbar(props: OtherNavbarProps) {
     } = props;
 
     const { authMember } = useGlobals();
-    // const authMember = {
-    //     _id: "temp-id",
-    //     name: "Michael",
-    //     phoneNumber: "87498479847",
-    //     memberImage: null,
-    // }
+
+    // ✅ Keep focus on the opener (avatar button)
+    const avatarBtnRef = useRef<HTMLButtonElement | null>(null);
+
+    // ✅ Wrap your existing close handler so we can restore focus
+    const closeMenuAndRestoreFocus = () => {
+        handleCloseLogout();
+        avatarBtnRef.current?.focus();
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <div
@@ -54,7 +67,6 @@ export default function OtherNavbar(props: OtherNavbarProps) {
             }}
         >
             <Container className="navbar-container">
-                {/* ===== TOP MENU (match HomeNavbar layout) ===== */}
                 <Stack className="menu">
                     <Box className="brand">
                         <NavLink to="/" className="brand-link">
@@ -97,7 +109,6 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                             </NavLink>
                         </Box>
 
-                        {/* Basket (same logic) */}
                         <Basket
                             cartItems={cartItems}
                             onAdd={onAdd}
@@ -106,7 +117,6 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                             onDeleteAll={onDeleteAll}
                         />
 
-                        {/* Auth (NO signup button on OtherNavbar) */}
                         {!authMember ? (
                             <Stack className="auth-buttons" direction="row" spacing={1.2}>
                                 <Button
@@ -116,39 +126,45 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                                 >
                                     Login
                                 </Button>
-
-                                {/* Keep logic/props, but DO NOT show signup */}
-                                {/* <Button
-                  variant="contained"
-                  className="signup-button"
-                  onClick={() => setSignupOpen(true)}
-                >
-                  Sign up
-                </Button> */}
                             </Stack>
                         ) : (
-                            <img
-                                className="user-avatar"
-                                src={
-                                    authMember?.memberImage
-                                        ? `${serverApi}/${authMember.memberImage}`
-                                        : "/icons/default-user.svg"
-                                }
+                            // ✅ Use a real focusable element as the menu opener
+                            <IconButton
+                                ref={avatarBtnRef}
                                 onClick={handleLogoutClick}
-                                alt="User"
-                            />
+                                aria-controls={open ? "account-menu" : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? "true" : undefined}
+                                sx={{ p: 0 }}
+                            >
+                                <img
+                                    className="user-avatar"
+                                    src={
+                                        authMember?.memberImage
+                                            ? `${serverApi}/${authMember.memberImage}`
+                                            : "/icons/default-user.svg"
+                                    }
+                                    alt="User"
+                                />
+                            </IconButton>
                         )}
 
                         <Menu
                             anchorEl={anchorEl}
                             id="account-menu"
-                            open={Boolean(anchorEl)}
-                            onClose={handleCloseLogout}
-                            onClick={handleCloseLogout}
+                            open={open}
+                            onClose={closeMenuAndRestoreFocus}
+                            onClick={closeMenuAndRestoreFocus}
                             transformOrigin={{ horizontal: "right", vertical: "top" }}
                             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                         >
-                            <MenuItem onClick={handleLogoutRequest}>
+                            <MenuItem
+                                onClick={() => {
+                                    handleLogoutRequest();
+                                    // ✅ ensure menu closes + focus restored
+                                    closeMenuAndRestoreFocus();
+                                }}
+                            >
                                 <ListItemIcon>
                                     <Logout fontSize="small" />
                                 </ListItemIcon>
@@ -158,7 +174,6 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                     </Stack>
                 </Stack>
 
-                {/* ===== SQUARE (same style & placement as HomeNavbar) ===== */}
                 <Stack className="header-frame">
                     <Box className="hero-box">
                         <Box className="hero-tag">Explore EcoFlora</Box>
@@ -166,14 +181,6 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                         <Box className="hero-sub">
                             Browse curated indoor & outdoor plants for your next space
                         </Box>
-
-                        {/* <Button
-                            variant="contained"
-                            className="hero-btn"
-                            onClick={() => (window.location.href = "/products")}
-                        >
-                            View Products
-                        </Button> */}
                     </Box>
                 </Stack>
             </Container>
